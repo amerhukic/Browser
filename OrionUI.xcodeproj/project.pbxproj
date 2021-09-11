@@ -12,7 +12,11 @@
 		1903642426EB427E00B82B1C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1903642226EB427E00B82B1C /* LaunchScreen.storyboard */; };
 		1903642F26EB427E00B82B1C /* OrionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903642E26EB427E00B82B1C /* OrionUITests.swift */; };
 		1903643A26EB427E00B82B1C /* OrionUIUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903643926EB427E00B82B1C /* OrionUIUITests.swift */; };
+		1903644B26EB944700B82B1C /* BrowserContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903644A26EB944700B82B1C /* BrowserContainerViewController.swift */; };
+		1903644D26EB945900B82B1C /* BrowserTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903644C26EB945900B82B1C /* BrowserTabViewController.swift */; };
 		1903645126EB96BE00B82B1C /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1903645026EB96BE00B82B1C /* SnapKit */; };
+		1903645426EB983D00B82B1C /* BrowserContainerContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903645326EB983D00B82B1C /* BrowserContainerContentView.swift */; };
+		1903645826EBB37700B82B1C /* BrowserToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903645726EBB37700B82B1C /* BrowserToolbar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +48,10 @@
 		1903643526EB427E00B82B1C /* OrionUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OrionUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1903643926EB427E00B82B1C /* OrionUIUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrionUIUITests.swift; sourceTree = "<group>"; };
 		1903643B26EB427E00B82B1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1903644A26EB944700B82B1C /* BrowserContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserContainerViewController.swift; sourceTree = "<group>"; };
+		1903644C26EB945900B82B1C /* BrowserTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabViewController.swift; sourceTree = "<group>"; };
+		1903645326EB983D00B82B1C /* BrowserContainerContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserContainerContentView.swift; sourceTree = "<group>"; };
+		1903645726EBB37700B82B1C /* BrowserToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserToolbar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,7 +104,9 @@
 			isa = PBXGroup;
 			children = (
 				1903641726EB427D00B82B1C /* AppDelegate.swift */,
+				1903645226EB980C00B82B1C /* Common */,
 				1903644726EB92F900B82B1C /* Container */,
+				1903644926EB941600B82B1C /* Tab */,
 				1903644826EB932C00B82B1C /* Other */,
 			);
 			path = OrionUI;
@@ -123,6 +133,8 @@
 		1903644726EB92F900B82B1C /* Container */ = {
 			isa = PBXGroup;
 			children = (
+				1903644A26EB944700B82B1C /* BrowserContainerViewController.swift */,
+				1903645326EB983D00B82B1C /* BrowserContainerContentView.swift */,
 			);
 			path = Container;
 			sourceTree = "<group>";
@@ -135,6 +147,22 @@
 				1903642526EB427E00B82B1C /* Info.plist */,
 			);
 			path = Other;
+			sourceTree = "<group>";
+		};
+		1903644926EB941600B82B1C /* Tab */ = {
+			isa = PBXGroup;
+			children = (
+				1903644C26EB945900B82B1C /* BrowserTabViewController.swift */,
+			);
+			path = Tab;
+			sourceTree = "<group>";
+		};
+		1903645226EB980C00B82B1C /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				1903645726EBB37700B82B1C /* BrowserToolbar.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -273,6 +301,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				1903641826EB427D00B82B1C /* AppDelegate.swift in Sources */,
+				1903644B26EB944700B82B1C /* BrowserContainerViewController.swift in Sources */,
+				1903644D26EB945900B82B1C /* BrowserTabViewController.swift in Sources */,
+				1903645826EBB37700B82B1C /* BrowserToolbar.swift in Sources */,
+				1903645426EB983D00B82B1C /* BrowserContainerContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
