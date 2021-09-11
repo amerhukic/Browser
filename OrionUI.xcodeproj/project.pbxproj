@@ -17,6 +17,9 @@
 		1903645126EB96BE00B82B1C /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1903645026EB96BE00B82B1C /* SnapKit */; };
 		1903645426EB983D00B82B1C /* BrowserContainerContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903645326EB983D00B82B1C /* BrowserContainerContentView.swift */; };
 		1903645826EBB37700B82B1C /* BrowserToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903645726EBB37700B82B1C /* BrowserToolbar.swift */; };
+		1903645A26EC9C6800B82B1C /* BrowserAddressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903645926EC9C6800B82B1C /* BrowserAddressBar.swift */; };
+		1903646126ECE03A00B82B1C /* BrowserAddressBar+TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903646026ECE03A00B82B1C /* BrowserAddressBar+TextField.swift */; };
+		1903646426ED07F600B82B1C /* UIColor+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903646326ED07F600B82B1C /* UIColor+Colors.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +55,9 @@
 		1903644C26EB945900B82B1C /* BrowserTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabViewController.swift; sourceTree = "<group>"; };
 		1903645326EB983D00B82B1C /* BrowserContainerContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserContainerContentView.swift; sourceTree = "<group>"; };
 		1903645726EBB37700B82B1C /* BrowserToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserToolbar.swift; sourceTree = "<group>"; };
+		1903645926EC9C6800B82B1C /* BrowserAddressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserAddressBar.swift; sourceTree = "<group>"; };
+		1903646026ECE03A00B82B1C /* BrowserAddressBar+TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserAddressBar+TextField.swift"; sourceTree = "<group>"; };
+		1903646326ED07F600B82B1C /* UIColor+Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Colors.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				1903641726EB427D00B82B1C /* AppDelegate.swift */,
+				1903646226ED07E800B82B1C /* Extensions */,
 				1903645226EB980C00B82B1C /* Common */,
 				1903644726EB92F900B82B1C /* Container */,
 				1903644926EB941600B82B1C /* Tab */,
@@ -160,9 +167,27 @@
 		1903645226EB980C00B82B1C /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				1903645F26ECE02900B82B1C /* AddressBar */,
 				1903645726EBB37700B82B1C /* BrowserToolbar.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		1903645F26ECE02900B82B1C /* AddressBar */ = {
+			isa = PBXGroup;
+			children = (
+				1903645926EC9C6800B82B1C /* BrowserAddressBar.swift */,
+				1903646026ECE03A00B82B1C /* BrowserAddressBar+TextField.swift */,
+			);
+			path = AddressBar;
+			sourceTree = "<group>";
+		};
+		1903646226ED07E800B82B1C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				1903646326ED07F600B82B1C /* UIColor+Colors.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -301,6 +326,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1903641826EB427D00B82B1C /* AppDelegate.swift in Sources */,
+				1903646426ED07F600B82B1C /* UIColor+Colors.swift in Sources */,
+				1903646126ECE03A00B82B1C /* BrowserAddressBar+TextField.swift in Sources */,
+				1903645A26EC9C6800B82B1C /* BrowserAddressBar.swift in Sources */,
 				1903644B26EB944700B82B1C /* BrowserContainerViewController.swift in Sources */,
 				1903644D26EB945900B82B1C /* BrowserTabViewController.swift in Sources */,
 				1903645826EBB37700B82B1C /* BrowserToolbar.swift in Sources */,

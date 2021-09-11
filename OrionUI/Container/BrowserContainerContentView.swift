@@ -12,6 +12,7 @@ class BrowserContainerContentView: UIView {
   let tabsScrollView = UIScrollView()
   let tabsStackView = UIStackView()
   let toolbar = BrowserToolbar()
+  let addressBar = BrowserAddressBar()
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -29,6 +30,7 @@ private extension BrowserContainerContentView {
     setupTabsScrollView()
     setupTabsStackView()
     setupToolbar()
+    setupAddressBar()
   }
   
   func setupTabsScrollView() {
@@ -58,6 +60,14 @@ private extension BrowserContainerContentView {
     toolbar.snp.makeConstraints {
       $0.leading.trailing.equalToSuperview()
       $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
+    }
+  }
+  
+  func setupAddressBar() {
+    addSubview(addressBar)
+    addressBar.snp.makeConstraints {
+      $0.leading.trailing.equalToSuperview().inset(20)
+      $0.bottom.equalTo(toolbar.snp.top)
     }
   }
 }
