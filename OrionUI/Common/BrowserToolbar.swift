@@ -18,7 +18,6 @@ class BrowserToolbar: UIToolbar {
     // If toolbar frame size is not set correctly (e.g. lowers than w:100 h:40) then autolayout breaks so we need to set it manually
     // https://stackoverflow.com/questions/59700020/layout-constraint-errors-with-simple-uitoolar-for-keyboard-inputaccessoryview
     super.init(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 100)))
-    removeTopLine()
     setupButtons()
   }
   
@@ -28,10 +27,6 @@ class BrowserToolbar: UIToolbar {
 }
 
 private extension BrowserToolbar {
-  func removeTopLine() {
-    setShadowImage(UIImage(), forToolbarPosition: .any)
-  }
-  
   func setupButtons() {
     items = [
       goBackButton,

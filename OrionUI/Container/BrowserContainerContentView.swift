@@ -60,6 +60,7 @@ private extension BrowserContainerContentView {
     toolbar.snp.makeConstraints {
       $0.leading.trailing.equalToSuperview()
       $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
+      $0.height.equalTo(100)
     }
   }
   
@@ -67,7 +68,7 @@ private extension BrowserContainerContentView {
     addSubview(addressBar)
     addressBar.snp.makeConstraints {
       $0.leading.trailing.equalToSuperview().inset(20)
-      $0.bottom.equalTo(toolbar.snp.top)
+      $0.top.equalTo(toolbar)
     }
   }
 }
