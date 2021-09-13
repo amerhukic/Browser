@@ -20,6 +20,7 @@
 		1903645A26EC9C6800B82B1C /* BrowserAddressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903645926EC9C6800B82B1C /* BrowserAddressBar.swift */; };
 		1903646126ECE03A00B82B1C /* BrowserAddressBar+TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903646026ECE03A00B82B1C /* BrowserAddressBar+TextField.swift */; };
 		1903646426ED07F600B82B1C /* UIColor+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903646326ED07F600B82B1C /* UIColor+Colors.swift */; };
+		196DD6C826EFAC620096A9FB /* BrowserTabContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196DD6C726EFAC620096A9FB /* BrowserTabContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		1903645926EC9C6800B82B1C /* BrowserAddressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserAddressBar.swift; sourceTree = "<group>"; };
 		1903646026ECE03A00B82B1C /* BrowserAddressBar+TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserAddressBar+TextField.swift"; sourceTree = "<group>"; };
 		1903646326ED07F600B82B1C /* UIColor+Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Colors.swift"; sourceTree = "<group>"; };
+		196DD6C726EFAC620096A9FB /* BrowserTabContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				1903644C26EB945900B82B1C /* BrowserTabViewController.swift */,
+				196DD6C726EFAC620096A9FB /* BrowserTabContentView.swift */,
 			);
 			path = Tab;
 			sourceTree = "<group>";
@@ -333,6 +336,7 @@
 				1903644D26EB945900B82B1C /* BrowserTabViewController.swift in Sources */,
 				1903645826EBB37700B82B1C /* BrowserToolbar.swift in Sources */,
 				1903645426EB983D00B82B1C /* BrowserContainerContentView.swift in Sources */,
+				196DD6C826EFAC620096A9FB /* BrowserTabContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -503,6 +507,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TSG7U2M54S;
 				INFOPLIST_FILE = OrionUI/Other/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -510,7 +515,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.amerhukic.OrionUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -522,6 +527,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TSG7U2M54S;
 				INFOPLIST_FILE = OrionUI/Other/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -529,7 +535,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.amerhukic.OrionUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

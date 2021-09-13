@@ -26,7 +26,7 @@ class BrowserContainerContentView: UIView {
 
 private extension BrowserContainerContentView {
   func setupView() {
-    backgroundColor = .white
+    backgroundColor = UIColor(white: 0.97, alpha: 1)
     setupTabsScrollView()
     setupTabsStackView()
     setupToolbar()
@@ -34,6 +34,7 @@ private extension BrowserContainerContentView {
   }
   
   func setupTabsScrollView() {
+    tabsScrollView.isPagingEnabled = true
     tabsScrollView.showsHorizontalScrollIndicator = false
     tabsScrollView.showsVerticalScrollIndicator = false
     addSubview(tabsScrollView)
@@ -47,7 +48,7 @@ private extension BrowserContainerContentView {
     tabsStackView.axis = .horizontal
     tabsStackView.alignment = .fill
     tabsStackView.distribution = .fillEqually
-    tabsStackView.spacing = 8
+    tabsStackView.spacing = 24
     tabsScrollView.addSubview(tabsStackView)
     tabsStackView.snp.makeConstraints {
       $0.edges.equalToSuperview()
