@@ -11,8 +11,9 @@ import SnapKit
 class BrowserContainerContentView: UIView {
   let tabsScrollView = UIScrollView()
   let tabsStackView = UIStackView()
+  let addressBarsScrollView = UIScrollView()
+  let addressBarsStackView = UIStackView()
   let toolbar = BrowserToolbar()
-  let addressBar = BrowserAddressBar()
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -30,7 +31,8 @@ private extension BrowserContainerContentView {
     setupTabsScrollView()
     setupTabsStackView()
     setupToolbar()
-    setupAddressBar()
+    setupAddressBarsScrollView()
+    setupAddressBarsStackView()
   }
   
   func setupTabsScrollView() {
@@ -65,11 +67,27 @@ private extension BrowserContainerContentView {
     }
   }
   
-  func setupAddressBar() {
-    addSubview(addressBar)
-    addressBar.snp.makeConstraints {
-      $0.leading.trailing.equalToSuperview().inset(20)
+  func setupAddressBarsScrollView() {
+    addressBarsScrollView.isPagingEnabled = true
+    addressBarsScrollView.showsHorizontalScrollIndicator = false
+    addressBarsScrollView.showsVerticalScrollIndicator = false
+    addSubview(addressBarsScrollView)
+    addressBarsScrollView.snp.makeConstraints {
       $0.top.equalTo(toolbar)
+      $0.leading.trailing.equalToSuperview()
+    }
+  }
+  
+  func setupAddressBarsStackView() {
+    addressBarsStackView.axis = .horizontal
+    addressBarsStackView.alignment = .fill
+    addressBarsStackView.distribution = .fillEqually
+    addressBarsStackView.spacing = 4
+    addressBarsScrollView.addSubview(addressBarsStackView)
+    addressBarsStackView.snp.makeConstraints {
+      $0.top.bottom.equalToSuperview()
+      $0.leading.trailing.equalToSuperview().inset(24)
+      $0.height.equalToSuperview()
     }
   }
 }

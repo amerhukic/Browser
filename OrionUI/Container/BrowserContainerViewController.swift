@@ -19,6 +19,7 @@ class BrowserContainerViewController: UIViewController {
     super.viewDidLoad()
     setupKeyboardObservers()
     openNewTab()
+    openNewTab()
   }
 }
 
@@ -41,6 +42,11 @@ private extension BrowserContainerViewController {
   }
   
   func openNewTab() {
+    addTabViewController()
+    addAddressBar()
+  }
+  
+  func addTabViewController() {
     let tabViewController = BrowserTabViewController()
     tabViewControllers.append(tabViewController)
     contentView.tabsStackView.addArrangedSubview(tabViewController.view)
@@ -49,6 +55,14 @@ private extension BrowserContainerViewController {
     }
     addChild(tabViewController)
     tabViewController.didMove(toParent: self)
+  }
+  
+  func addAddressBar() {
+    let addressBar = BrowserAddressBar()
+    contentView.addressBarsStackView.addArrangedSubview(addressBar)
+    addressBar.snp.makeConstraints {
+      $0.width.equalTo(contentView).offset(-48)
+    }
   }
 }
 
