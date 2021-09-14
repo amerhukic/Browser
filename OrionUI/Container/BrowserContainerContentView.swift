@@ -15,6 +15,12 @@ class BrowserContainerContentView: UIView {
   let addressBarsStackView = UIStackView()
   let toolbar = BrowserToolbar()
   
+  var addressBars: [BrowserAddressBar] {
+    (addressBarsStackView.arrangedSubviews as? [BrowserAddressBar]) ?? []
+  }
+  
+  var addressBarsScrollViewBottomConstraint: Constraint?
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
     setupView()
@@ -73,7 +79,7 @@ private extension BrowserContainerContentView {
     addressBarsScrollView.showsVerticalScrollIndicator = false
     addSubview(addressBarsScrollView)
     addressBarsScrollView.snp.makeConstraints {
-      $0.top.equalTo(toolbar)
+      addressBarsScrollViewBottomConstraint = $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-38).constraint
       $0.leading.trailing.equalToSuperview()
     }
   }

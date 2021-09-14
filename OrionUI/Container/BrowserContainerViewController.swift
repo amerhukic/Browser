@@ -10,6 +10,7 @@ import UIKit
 class BrowserContainerViewController: UIViewController {
   private let contentView = BrowserContainerContentView()
   private var tabViewControllers = [BrowserTabViewController]()
+  private var currentTabIndex = 0
   
   override func loadView() {
     view = contentView
@@ -18,7 +19,6 @@ class BrowserContainerViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setupKeyboardObservers()
-    openNewTab()
     openNewTab()
   }
 }
@@ -70,13 +70,17 @@ private extension BrowserContainerViewController {
 private extension BrowserContainerViewController {
   @objc func keyboardWillShow(_ notification: NSNotification) {
     animateWithKeyboard(notification: notification) { keyboardFrame in
-      print(keyboardFrame)
+      self.contentView.addressBarsScrollViewBottomConstraint?.update(offset: -keyboardFrame.height)
+      self.contentView.addressBarsScrollView.backgroundColor = UIColor(red: 214/255, green: 215/255, blue: 220/255, alpha: 1)
+      self.contentView.addressBars[self.currentTabIndex].textField.placeholder = ""
     }
   }
   
   @objc func keyboardWillHide(_ notification: NSNotification) {
     animateWithKeyboard(notification: notification) { keyboardFrame in
-      print(keyboardFrame)
+      self.contentView.addressBarsScrollViewBottomConstraint?.update(offset: -38)
+      self.contentView.addressBarsScrollView.backgroundColor = .clear
+      self.contentView.addressBars[self.currentTabIndex].textField.placeholder = "Search or enter website"
     }
   }
 }
