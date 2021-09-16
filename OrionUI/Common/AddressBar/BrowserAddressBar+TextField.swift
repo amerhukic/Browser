@@ -7,8 +7,38 @@
 
 import UIKit
 
+extension BrowserAddressBar.TextField {
+  enum State {
+    case editing
+    case inactive
+  }
+}
+
 extension BrowserAddressBar {
   class TextField: UITextField {
+    private let paddingView = UIView()
+    private let magnifyingGlassImageView = UIImageView()
+    private let aAButton = UIButton(type: .system)
+    private let reloadButton = UIButton(type: .system)
+    
+    var activityState = State.inactive {
+      didSet {
+        switch activityState {
+        case .editing:
+          leftView = paddingView
+          rightView = nil
+          textAlignment = .natural
+          placeholder = nil
+          selectAll(nil)
+        case .inactive:
+          leftView = hasText ? aAButton : magnifyingGlassImageView
+          rightView = hasText ? reloadButton : nil
+          textAlignment = hasText ? .center : .natural
+          showDefaultPlaceholder()
+        }
+      }
+    }
+    
     override init(frame: CGRect) {
       super.init(frame: frame)
       setupView()
@@ -19,17 +49,23 @@ extension BrowserAddressBar {
     }
     
     override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
-      var rect = super.leftViewRect(forBounds: bounds)
-      rect.origin.x += 10
-      rect.size.width = 30
-      return rect
+      let width: CGFloat
+      switch activityState {
+      case .editing:
+        width = 5
+      case .inactive:
+        width = 30
+      }
+      let height = CGFloat(22)
+      let y = (bounds.height - height) / 2
+      return CGRect(x: 10, y: y, width: width, height: height)
     }
 
     override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
-      var rect = super.rightViewRect(forBounds: bounds)
-      rect.origin.x -= 20
-      rect.size.width = 30
-      return rect
+      let width = CGFloat(35)
+      let height = CGFloat(22)
+      let y = (bounds.height - height) / 2
+      return CGRect(x: bounds.width - width - 5, y: y, width: width, height: height)
     }
 
     override func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
@@ -46,32 +82,35 @@ private extension BrowserAddressBar.TextField {
     layer.cornerRadius = 12
     backgroundColor = .white
     clearButtonMode = .whileEditing
-    setupPlaceholder()
-    setupLeftView()
-    setupRightView()
+    returnKeyType = .go
+    leftViewMode = .always
+    rightViewMode = .always
+    setupMagnifyingGlassImage()
+    setupAaButton()
+    setupReloadButton()
+    activityState = .inactive
   }
   
-  func setupPlaceholder() {
+  func setupMagnifyingGlassImage() {
+    magnifyingGlassImageView.image = UIImage(systemName: "magnifyingglass")?.withRenderingMode(.alwaysTemplate)
+    magnifyingGlassImageView.tintColor = .textFieldGray
+    magnifyingGlassImageView.contentMode = .scaleAspectFit
+  }
+  
+  func setupAaButton() {
+    aAButton.setImage(UIImage(systemName: "textformat.size")?.withRenderingMode(.alwaysTemplate), for: .normal)
+    aAButton.imageView?.contentMode = .scaleAspectFit
+    aAButton.tintColor = .black
+  }
+  
+  func setupReloadButton() {
+    reloadButton.setImage(UIImage(systemName: "arrow.clockwise")?.withRenderingMode(.alwaysTemplate), for: .normal)
+    reloadButton.imageView?.contentMode = .scaleAspectFit
+    reloadButton.tintColor = .black
+  }
+  
+  func showDefaultPlaceholder() {
     let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.textFieldGray]
     attributedPlaceholder = NSAttributedString(string: "Search or enter website", attributes: attributes)
   }
-  
-  func setupLeftView() {
-    let imageView = UIImageView()
-    imageView.image = UIImage(systemName: "magnifyingglass")?.withRenderingMode(.alwaysTemplate)
-    imageView.tintColor = .textFieldGray
-    imageView.contentMode = .scaleAspectFit
-    leftView = imageView
-    leftViewMode = .always
-  }
-  
-  func setupRightView() {
-    let recordingButton = UIButton(type: .system)
-    recordingButton.setImage(UIImage(systemName: "mic.fill")?.withRenderingMode(.alwaysTemplate), for: .normal)
-    recordingButton.imageView?.contentMode = .scaleAspectFit
-    recordingButton.tintColor = .textFieldGray
-    rightView = recordingButton
-    rightViewMode = .unlessEditing
-  }
 }
-

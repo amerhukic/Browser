@@ -10,7 +10,7 @@ import UIKit
 class BrowserContainerViewController: UIViewController {
   private let contentView = BrowserContainerContentView()
   private var tabViewControllers = [BrowserTabViewController]()
-  private var currentTabIndex = 0
+  private var isAddressBarActive = false
   
   override func loadView() {
     view = contentView
@@ -19,6 +19,8 @@ class BrowserContainerViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setupKeyboardObservers()
+    openNewTab()
+    openNewTab()
     openNewTab()
   }
 }
@@ -49,38 +51,37 @@ private extension BrowserContainerViewController {
   func addTabViewController() {
     let tabViewController = BrowserTabViewController()
     tabViewControllers.append(tabViewController)
-    contentView.tabsStackView.addArrangedSubview(tabViewController.view)
-    tabViewController.view.snp.makeConstraints {
-      $0.width.equalTo(contentView)
-    }
+    contentView.addTabView(tabViewController.view)
     addChild(tabViewController)
     tabViewController.didMove(toParent: self)
   }
   
   func addAddressBar() {
     let addressBar = BrowserAddressBar()
-    contentView.addressBarsStackView.addArrangedSubview(addressBar)
-    addressBar.snp.makeConstraints {
-      $0.width.equalTo(contentView).offset(-48)
+    addressBar.onBeginEditing = { [weak self] in
+      self?.isAddressBarActive = true
     }
+    addressBar.onGoTapped = { [weak self] in
+      self?.view.endEditing(true)
+    }
+    contentView.addAddressBar(addressBar)
   }
 }
 
 // MARK: Keyboard handling
 private extension BrowserContainerViewController {
   @objc func keyboardWillShow(_ notification: NSNotification) {
+    guard isAddressBarActive else { return }
     animateWithKeyboard(notification: notification) { keyboardFrame in
-      self.contentView.addressBarsScrollViewBottomConstraint?.update(offset: -keyboardFrame.height)
-      self.contentView.addressBarsScrollView.backgroundColor = UIColor(red: 214/255, green: 215/255, blue: 220/255, alpha: 1)
-      self.contentView.addressBars[self.currentTabIndex].textField.placeholder = ""
+      self.contentView.updateStateForKeyboardAppearing(with: keyboardFrame.height)
     }
   }
   
   @objc func keyboardWillHide(_ notification: NSNotification) {
-    animateWithKeyboard(notification: notification) { keyboardFrame in
-      self.contentView.addressBarsScrollViewBottomConstraint?.update(offset: -38)
-      self.contentView.addressBarsScrollView.backgroundColor = .clear
-      self.contentView.addressBars[self.currentTabIndex].textField.placeholder = "Search or enter website"
+    guard isAddressBarActive else { return }
+    isAddressBarActive = false
+    animateWithKeyboard(notification: notification) { _ in
+      self.contentView.updateStateForKeyboardDisappearing()
     }
   }
 }

@@ -9,7 +9,10 @@ import UIKit
 
 class BrowserAddressBar: UIView {
   private let shadowView = UIView()
-  let textField = TextField()
+  private let textField = TextField()
+  
+  var onBeginEditing: (() -> Void)?
+  var onGoTapped: (() -> Void)?
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -54,11 +57,25 @@ private extension BrowserAddressBar {
 }
 
 extension BrowserAddressBar: UITextFieldDelegate {
-  func textFieldDidBeginEditing(_ textField: UITextField) {
-    print(1111)
+  func textFieldDidBeginEditing(_: UITextField) {
+    onBeginEditing?()
+    shadowView.isHidden = true
+    textField.activityState = .editing
   }
   
-  func textFieldDidEndEditing(_ textField: UITextField) {
-    print(2222)
+  func textFieldDidEndEditing(_: UITextField) {
+    // e.g. dismissed by tapping outside of keboard or textfield
+    // call delegate to animate back to original state
+    // reset tf state to original string - to znaci da moram snimiti string prije dismissa
+    shadowView.isHidden = false
+    textField.activityState = .inactive
+  }
+  
+  func textFieldShouldReturn(_: UITextField) -> Bool {
+    // call delegate to animate back + show loading animation bar + load website
+    shadowView.isHidden = false
+    textField.activityState = .inactive
+    onGoTapped?()
+    return true
   }
 }
