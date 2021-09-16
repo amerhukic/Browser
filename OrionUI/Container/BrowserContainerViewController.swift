@@ -18,6 +18,7 @@ class BrowserContainerViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    setupNavigationBar()
     setupKeyboardObservers()
     openNewTab()
     openNewTab()
@@ -27,6 +28,14 @@ class BrowserContainerViewController: UIViewController {
 
 // MARK: Helper methods
 private extension BrowserContainerViewController {
+  func setupNavigationBar() {
+    navigationController?.setNavigationBarHidden(true, animated: false)
+    navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+    navigationController?.navigationBar.shadowImage = UIImage()
+    navigationController?.navigationBar.isTranslucent = true
+    navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTapped))
+  }
+  
   func setupKeyboardObservers() {
     NotificationCenter.default.addObserver(
       self,
@@ -62,9 +71,13 @@ private extension BrowserContainerViewController {
       self?.isAddressBarActive = true
     }
     addressBar.onGoTapped = { [weak self] in
-      self?.view.endEditing(true)
+      self?.dismissKeyboard()
     }
     contentView.addAddressBar(addressBar)
+  }
+  
+  func dismissKeyboard() {
+    view.endEditing(true)
   }
 }
 
@@ -72,6 +85,7 @@ private extension BrowserContainerViewController {
 private extension BrowserContainerViewController {
   @objc func keyboardWillShow(_ notification: NSNotification) {
     guard isAddressBarActive else { return }
+    navigationController?.setNavigationBarHidden(false, animated: true)
     animateWithKeyboard(notification: notification) { keyboardFrame in
       self.contentView.updateStateForKeyboardAppearing(with: keyboardFrame.height)
     }
@@ -80,9 +94,14 @@ private extension BrowserContainerViewController {
   @objc func keyboardWillHide(_ notification: NSNotification) {
     guard isAddressBarActive else { return }
     isAddressBarActive = false
+    navigationController?.setNavigationBarHidden(true, animated: true)
     animateWithKeyboard(notification: notification) { _ in
       self.contentView.updateStateForKeyboardDisappearing()
     }
+  }
+  
+  @objc func cancelButtonTapped() {
+    dismissKeyboard()
   }
 }
 

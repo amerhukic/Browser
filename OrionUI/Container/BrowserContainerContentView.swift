@@ -15,6 +15,7 @@ class BrowserContainerContentView: UIView {
   private let addressBarsStackView = UIStackView()
   private let addressBarKeyboardBackgroundView = UIView()
   private let toolbar = BrowserToolbar()
+  private let overlayView = UIView()
   
   private let addressBarsScrollViewBottomOffset = -38
   private let addressBarWidthOffset = -48
@@ -50,6 +51,7 @@ class BrowserContainerContentView: UIView {
   }
   
   func updateStateForKeyboardAppearing(with keyboardHeight: CGFloat) {
+    overlayView.alpha = 1
     addressBarKeyboardBackgroundView.isHidden = false
     addressBarsStackView.spacing = 30
     addressBarsStackViewLeadingConstraint?.update(inset: 16)
@@ -60,6 +62,7 @@ class BrowserContainerContentView: UIView {
   }
   
   func updateStateForKeyboardDisappearing() {
+    overlayView.alpha = 0
     addressBarKeyboardBackgroundView.isHidden = true
     addressBarsStackView.spacing = addressBarsStackViewSpacing
     addressBarsStackViewLeadingConstraint?.update(offset: addressBarsStackViewSidePadding)
@@ -79,6 +82,7 @@ private extension BrowserContainerContentView {
     setupAddressBarsScrollView()
     setupAddressBarsStackView()
     setupAddressBarKeyboardBackgroundView()
+    setupOverlayView()
   }
   
   func setupTabsScrollView() {
@@ -145,6 +149,15 @@ private extension BrowserContainerContentView {
       addressBarKeyboardBackgroundViewBottomConstraint = $0.bottom.equalTo(safeAreaLayoutGuide).constraint
       $0.leading.trailing.equalToSuperview()
       $0.height.equalTo(60)
+    }
+  }
+  
+  func setupOverlayView() {
+    overlayView.alpha = 0
+    overlayView.backgroundColor = .white
+    insertSubview(overlayView, belowSubview: addressBarKeyboardBackgroundView)
+    overlayView.snp.makeConstraints {
+      $0.edges.equalToSuperview()
     }
   }
 }
