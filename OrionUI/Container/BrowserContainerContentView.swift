@@ -17,15 +17,21 @@ class BrowserContainerContentView: UIView {
   private let toolbar = BrowserToolbar()
   private let overlayView = UIView()
   
-  private let addressBarsScrollViewBottomOffset = -38
-  private let addressBarWidthOffset = -48
-  private let addressBarsStackViewSidePadding = 24
+  private let tabsStackViewSpacing = CGFloat(24)
+  private let addressBarsScrollViewBottomOffset = CGFloat(-38)
+  private let addressBarWidthOffset = CGFloat(-48)
+  private let addressBarsStackViewSidePadding = CGFloat(24)
   private let addressBarsStackViewSpacing = CGFloat(4)
   private var addressBarsStackViewLeadingConstraint: Constraint?
   private var addressBarsStackViewTrailingConstraint: Constraint?
   private var addressBarsScrollViewBottomConstraint: Constraint?
   private var addressBarKeyboardBackgroundViewBottomConstraint: Constraint?
   private var addressBarsWidthConstraints = [Constraint]()
+  
+  private var currentPage = CGFloat(0)
+  private lazy var pageWidth: CGFloat = {
+    frame.width + addressBarWidthOffset + addressBarsStackViewSpacing
+  }()
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -86,9 +92,9 @@ private extension BrowserContainerContentView {
   }
   
   func setupTabsScrollView() {
-    tabsScrollView.isPagingEnabled = true
     tabsScrollView.showsHorizontalScrollIndicator = false
     tabsScrollView.showsVerticalScrollIndicator = false
+    tabsScrollView.isScrollEnabled = false
     addSubview(tabsScrollView)
     tabsScrollView.snp.makeConstraints {
       $0.top.leading.trailing.equalToSuperview()
@@ -100,7 +106,7 @@ private extension BrowserContainerContentView {
     tabsStackView.axis = .horizontal
     tabsStackView.alignment = .fill
     tabsStackView.distribution = .fillEqually
-    tabsStackView.spacing = 24
+    tabsStackView.spacing = tabsStackViewSpacing
     tabsScrollView.addSubview(tabsStackView)
     tabsStackView.snp.makeConstraints {
       $0.edges.equalToSuperview()
@@ -118,9 +124,10 @@ private extension BrowserContainerContentView {
   }
   
   func setupAddressBarsScrollView() {
-    addressBarsScrollView.isPagingEnabled = true
     addressBarsScrollView.showsHorizontalScrollIndicator = false
     addressBarsScrollView.showsVerticalScrollIndicator = false
+    addressBarsScrollView.decelerationRate = .fast
+    addressBarsScrollView.delegate = self
     addSubview(addressBarsScrollView)
     addressBarsScrollView.snp.makeConstraints {
       addressBarsScrollViewBottomConstraint = $0.bottom.equalTo(safeAreaLayoutGuide).offset(addressBarsScrollViewBottomOffset).constraint
@@ -159,5 +166,43 @@ private extension BrowserContainerContentView {
     overlayView.snp.makeConstraints {
       $0.edges.equalToSuperview()
     }
+  }
+}
+
+extension BrowserContainerContentView: UIScrollViewDelegate {
+  func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    currentPage = round(scrollView.contentOffset.x / pageWidth)
+  }
+  
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    // width of one address bar page is address bar width + padding of `addressBarsStackViewSpacing / 2` from left and right side
+    // we need to exclude the leading and trailing offset of (24 - address bar stack view padding from one side) from the precentage calculation
+    let padding = 2 * (addressBarsStackViewSidePadding - (addressBarsStackViewSpacing) / 2)
+    let percentage = addressBarsScrollView.contentOffset.x / (addressBarsScrollView.contentSize.width - padding)
+    
+    // we need to add tabs stack view spacing to the tabs scroll view content width, because spacing after last page is missing (we don't have any padding on sides)
+    tabsScrollView.contentOffset.x = percentage * (tabsScrollView.contentSize.width + tabsStackViewSpacing)
+  }
+  
+  func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    let finalXPosition = targetContentOffset.pointee.x
+    var nextPage: CGFloat
+    if velocity.x > 0 {
+      // swiping from right to left
+      nextPage = ceil(finalXPosition / pageWidth)
+    } else if velocity.x == 0 {
+      // no swiping - user lifted finger
+      nextPage = round(finalXPosition / pageWidth)
+    } else {
+      // swiping left to right
+      nextPage = floor(finalXPosition / pageWidth)
+    }
+    
+    if nextPage < currentPage {
+      nextPage = currentPage - 1
+    } else if nextPage > currentPage {
+      nextPage = currentPage + 1
+    }
+    targetContentOffset.pointee = CGPoint(x: nextPage * pageWidth, y: targetContentOffset.pointee.y)
   }
 }
