@@ -12,7 +12,7 @@ class BrowserAddressBar: UIView {
   private let textField = TextField()
   
   var onBeginEditing: (() -> Void)?
-  var onGoTapped: (() -> Void)?
+  var onGoTapped: ((String) -> Void)?
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -75,7 +75,7 @@ extension BrowserAddressBar: UITextFieldDelegate {
     // call delegate to animate back + show loading animation bar + load website
     shadowView.isHidden = false
     textField.activityState = .inactive
-    onGoTapped?()
+    onGoTapped?(textField.text ?? "")
     return true
   }
 }

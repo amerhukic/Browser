@@ -10,9 +10,10 @@ import UIKit
 class BrowserContainerViewController: UIViewController {
   private let contentView = BrowserContainerContentView()
   private var tabViewControllers = [BrowserTabViewController]()
-  private var isAddressBarActive = false
   private let keyboardManager = KeyboardManager()
-  
+  private var isAddressBarActive = false
+  private var currentTabIndex = 0
+
   override func loadView() {
     view = contentView
   }
@@ -86,8 +87,10 @@ private extension BrowserContainerViewController {
     addressBar.onBeginEditing = { [weak self] in
       self?.isAddressBarActive = true
     }
-    addressBar.onGoTapped = { [weak self] in
-      self?.dismissKeyboard()
+    addressBar.onGoTapped = { [weak self] text in
+      guard let self = self else { return }
+      self.tabViewControllers[self.currentTabIndex].loadWebsite(urlString: text)
+      self.dismissKeyboard()
     }
     contentView.addAddressBar(addressBar)
   }
