@@ -21,6 +21,8 @@
 		1903646126ECE03A00B82B1C /* BrowserAddressBar+TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903646026ECE03A00B82B1C /* BrowserAddressBar+TextField.swift */; };
 		1903646426ED07F600B82B1C /* UIColor+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903646326ED07F600B82B1C /* UIColor+Colors.swift */; };
 		196DD6C826EFAC620096A9FB /* BrowserTabContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196DD6C726EFAC620096A9FB /* BrowserTabContentView.swift */; };
+		19F17A1926F3F2B500D4F9DE /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F17A1826F3F2B500D4F9DE /* KeyboardManager.swift */; };
+		19F17A1B26F3F59800D4F9DE /* NSNotification+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F17A1A26F3F59800D4F9DE /* NSNotification+Helpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +62,8 @@
 		1903646026ECE03A00B82B1C /* BrowserAddressBar+TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserAddressBar+TextField.swift"; sourceTree = "<group>"; };
 		1903646326ED07F600B82B1C /* UIColor+Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Colors.swift"; sourceTree = "<group>"; };
 		196DD6C726EFAC620096A9FB /* BrowserTabContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabContentView.swift; sourceTree = "<group>"; };
+		19F17A1826F3F2B500D4F9DE /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
+		19F17A1A26F3F59800D4F9DE /* NSNotification+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNotification+Helpers.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +117,7 @@
 			children = (
 				1903641726EB427D00B82B1C /* AppDelegate.swift */,
 				1903646226ED07E800B82B1C /* Extensions */,
+				19F17A1726F3F29D00D4F9DE /* Helpers */,
 				1903645226EB980C00B82B1C /* Common */,
 				1903644726EB92F900B82B1C /* Container */,
 				1903644926EB941600B82B1C /* Tab */,
@@ -189,8 +194,17 @@
 			isa = PBXGroup;
 			children = (
 				1903646326ED07F600B82B1C /* UIColor+Colors.swift */,
+				19F17A1A26F3F59800D4F9DE /* NSNotification+Helpers.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		19F17A1726F3F29D00D4F9DE /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				19F17A1826F3F2B500D4F9DE /* KeyboardManager.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,6 +344,8 @@
 			files = (
 				1903641826EB427D00B82B1C /* AppDelegate.swift in Sources */,
 				1903646426ED07F600B82B1C /* UIColor+Colors.swift in Sources */,
+				19F17A1926F3F2B500D4F9DE /* KeyboardManager.swift in Sources */,
+				19F17A1B26F3F59800D4F9DE /* NSNotification+Helpers.swift in Sources */,
 				1903646126ECE03A00B82B1C /* BrowserAddressBar+TextField.swift in Sources */,
 				1903645A26EC9C6800B82B1C /* BrowserAddressBar.swift in Sources */,
 				1903644B26EB944700B82B1C /* BrowserContainerViewController.swift in Sources */,
