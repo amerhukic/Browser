@@ -6,11 +6,15 @@
 //
 
 import UIKit
+import SnapKit
 
 class BrowserAddressBar: UIView {
   private let shadowView = UIView()
   private let textField = TextField()
-  
+  private let textFieldSidePadding = CGFloat(4)
+  private var textFieldLeadingConstraint: Constraint?
+  private var textFieldTrailingConstraint: Constraint?
+
   var onBeginEditing: (() -> Void)?
   var onGoTapped: ((String) -> Void)?
   
@@ -51,30 +55,38 @@ private extension BrowserAddressBar {
     textField.snp.makeConstraints {
       $0.height.equalTo(46)
       $0.top.bottom.equalToSuperview().inset(8)
-      $0.leading.trailing.equalToSuperview().inset(4)
+      textFieldLeadingConstraint = $0.leading.equalToSuperview().offset(textFieldSidePadding).constraint
+      textFieldTrailingConstraint = $0.trailing.equalToSuperview().offset(-textFieldSidePadding).constraint
     }
+  }
+  
+  func showEditingState() {
+    shadowView.isHidden = true
+    textFieldLeadingConstraint?.update(offset: 0)
+    textFieldTrailingConstraint?.update(offset: 0)
+  }
+  
+  func showInactiveState() {
+    shadowView.isHidden = false
+    textFieldLeadingConstraint?.update(offset: textFieldSidePadding)
+    textFieldTrailingConstraint?.update(offset: -textFieldSidePadding)
   }
 }
 
 extension BrowserAddressBar: UITextFieldDelegate {
   func textFieldDidBeginEditing(_: UITextField) {
     onBeginEditing?()
-    shadowView.isHidden = true
+    showEditingState()
     textField.activityState = .editing
   }
   
   func textFieldDidEndEditing(_: UITextField) {
-    // e.g. dismissed by tapping outside of keboard or textfield
-    // call delegate to animate back to original state
-    // reset tf state to original string - to znaci da moram snimiti string prije dismissa
-    shadowView.isHidden = false
+    showInactiveState()
     textField.activityState = .inactive
   }
   
   func textFieldShouldReturn(_: UITextField) -> Bool {
-    // call delegate to animate back + show loading animation bar + load website
-    shadowView.isHidden = false
-    textField.activityState = .inactive
+    showInactiveState()
     onGoTapped?(textField.text ?? "")
     return true
   }

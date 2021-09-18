@@ -22,11 +22,9 @@ class BrowserContainerContentView: UIView {
   private let addressBarWidthOffset = CGFloat(-48)
   private let addressBarsStackViewSidePadding = CGFloat(24)
   private let addressBarsStackViewSpacing = CGFloat(4)
-  private var addressBarsStackViewLeadingConstraint: Constraint?
-  private var addressBarsStackViewTrailingConstraint: Constraint?
+  private let addressBarsHidingCenterOffset = CGFloat(30)
   private var addressBarsScrollViewBottomConstraint: Constraint?
   private var addressBarKeyboardBackgroundViewBottomConstraint: Constraint?
-  private var addressBarsWidthConstraints = [Constraint]()
   
   private var currentPage = CGFloat(0)
   private lazy var pageWidth: CGFloat = {
@@ -52,30 +50,29 @@ class BrowserContainerContentView: UIView {
   func addAddressBar(_ addressBar: BrowserAddressBar) {
     addressBarsStackView.addArrangedSubview(addressBar)
     addressBar.snp.makeConstraints {
-      addressBarsWidthConstraints.append($0.width.equalTo(self).offset(addressBarWidthOffset).constraint)
+      $0.width.equalTo(self).offset(addressBarWidthOffset)
     }
   }
   
   func updateStateForKeyboardAppearing(with keyboardHeight: CGFloat) {
+    // show overlay view
     overlayView.alpha = 1
+
+    // show address bar gray background view
     addressBarKeyboardBackgroundView.isHidden = false
-    addressBarsStackView.spacing = 30
-    addressBarsStackViewLeadingConstraint?.update(inset: 16)
-    addressBarsStackViewTrailingConstraint?.update(offset: -16)
-    addressBarsScrollViewBottomConstraint?.update(offset: -keyboardHeight)
     addressBarKeyboardBackgroundViewBottomConstraint?.update(offset: -keyboardHeight)
-    addressBarsWidthConstraints.forEach { $0.update(offset: -32) }
+    addressBarsScrollViewBottomConstraint?.update(offset: -keyboardHeight)
+    
+    // move and hide address bars on left and right side of the current address bar
+    setSideAddressBarsHidden(true)
   }
   
   func updateStateForKeyboardDisappearing() {
     overlayView.alpha = 0
     addressBarKeyboardBackgroundView.isHidden = true
-    addressBarsStackView.spacing = addressBarsStackViewSpacing
-    addressBarsStackViewLeadingConstraint?.update(offset: addressBarsStackViewSidePadding)
-    addressBarsStackViewTrailingConstraint?.update(offset: -addressBarsStackViewSidePadding)
-    addressBarsScrollViewBottomConstraint?.update(offset: addressBarsScrollViewBottomOffset)
     addressBarKeyboardBackgroundViewBottomConstraint?.update(offset: 0)
-    addressBarsWidthConstraints.forEach { $0.update(offset: addressBarWidthOffset) }
+    addressBarsScrollViewBottomConstraint?.update(offset: addressBarsScrollViewBottomOffset)
+    setSideAddressBarsHidden(false)
   }
 }
 
@@ -138,13 +135,13 @@ private extension BrowserContainerContentView {
   func setupAddressBarsStackView() {
     addressBarsStackView.axis = .horizontal
     addressBarsStackView.alignment = .fill
-    addressBarsStackView.distribution = .fillEqually
+    addressBarsStackView.distribution = .fill
     addressBarsStackView.spacing = addressBarsStackViewSpacing
     addressBarsScrollView.addSubview(addressBarsStackView)
     addressBarsStackView.snp.makeConstraints {
       $0.top.bottom.equalToSuperview()
-      addressBarsStackViewLeadingConstraint = $0.leading.equalToSuperview().offset(addressBarsStackViewSidePadding).constraint
-      addressBarsStackViewTrailingConstraint = $0.trailing.equalToSuperview().offset(-addressBarsStackViewSidePadding).constraint
+      $0.leading.equalToSuperview().offset(addressBarsStackViewSidePadding)
+      $0.trailing.equalToSuperview().offset(-addressBarsStackViewSidePadding)
       $0.height.equalToSuperview()
     }
   }
@@ -166,6 +163,48 @@ private extension BrowserContainerContentView {
     overlayView.snp.makeConstraints {
       $0.edges.equalToSuperview()
     }
+  }
+  
+  func setSideAddressBarsHidden(_ isHidden: Bool) {
+    let numberOfPages = addressBarsStackView.arrangedSubviews.count
+    let currentPage = Int(currentPage)
+    
+    if currentPage == 0 && numberOfPages > 1 {
+      let rightAddressBar = addressBarsStackView.arrangedSubviews[currentPage + 1]
+      setHidden(isHidden, forRightAddressBar: rightAddressBar)
+    }
+    
+    if currentPage > 0 {
+      let leftAddressBar = addressBarsStackView.arrangedSubviews[currentPage - 1]
+      setHidden(isHidden, forLeftAddressBar: leftAddressBar)
+      
+      if Int(currentPage) < (numberOfPages - 1) {
+        let rightAddressBar = addressBarsStackView.arrangedSubviews[currentPage + 1]
+        setHidden(isHidden, forRightAddressBar: rightAddressBar)
+      }
+    }
+  }
+  
+  func setHidden(_ isHidden: Bool, forRightAddressBar addressBar: UIView) {
+    if isHidden {
+      addressBar.center = CGPoint(x: addressBar.center.x + addressBarsHidingCenterOffset,
+                                  y: addressBar.center.y - addressBarsHidingCenterOffset)
+    } else {
+      addressBar.center = CGPoint(x: addressBar.center.x - addressBarsHidingCenterOffset,
+                                  y: addressBar.center.y + addressBarsHidingCenterOffset)
+    }
+    addressBar.alpha = isHidden ? 0 : 1
+  }
+  
+  func setHidden(_ isHidden: Bool, forLeftAddressBar addressBar: UIView) {
+    if isHidden {
+      addressBar.center = CGPoint(x: addressBar.center.x - addressBarsHidingCenterOffset,
+                                  y: addressBar.center.y - addressBarsHidingCenterOffset)
+    } else {
+      addressBar.center = CGPoint(x: addressBar.center.x + addressBarsHidingCenterOffset,
+                                  y: addressBar.center.y + addressBarsHidingCenterOffset)
+    }
+    addressBar.alpha = isHidden ? 0 : 1
   }
 }
 
@@ -198,11 +237,11 @@ extension BrowserContainerContentView: UIScrollViewDelegate {
       nextPage = floor(finalXPosition / pageWidth)
     }
     
-    if nextPage < currentPage {
-      nextPage = currentPage - 1
-    } else if nextPage > currentPage {
-      nextPage = currentPage + 1
+    if currentPage < nextPage {
+      currentPage += 1
+    } else if currentPage > nextPage {
+      currentPage -= 1
     }
-    targetContentOffset.pointee = CGPoint(x: nextPage * pageWidth, y: targetContentOffset.pointee.y)
+    targetContentOffset.pointee = CGPoint(x: currentPage * pageWidth, y: targetContentOffset.pointee.y)
   }
 }
