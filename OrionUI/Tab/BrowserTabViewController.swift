@@ -9,6 +9,7 @@ import UIKit
 
 class BrowserTabViewController: UIViewController {
   private let contentView = BrowserTabContentView()
+  var hasLoadedUrl = false
   
   override func loadView() {
     view = contentView
@@ -21,5 +22,6 @@ class BrowserTabViewController: UIViewController {
   func loadWebsite(urlString: String) {
     guard let url = URL(string: urlString) else { return }
     contentView.webView.load(URLRequest(url: url))
+    hasLoadedUrl = true
   }
 }

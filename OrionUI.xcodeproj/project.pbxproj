@@ -23,6 +23,7 @@
 		196DD6C826EFAC620096A9FB /* BrowserTabContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196DD6C726EFAC620096A9FB /* BrowserTabContentView.swift */; };
 		19F17A1926F3F2B500D4F9DE /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F17A1826F3F2B500D4F9DE /* KeyboardManager.swift */; };
 		19F17A1B26F3F59800D4F9DE /* NSNotification+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F17A1A26F3F59800D4F9DE /* NSNotification+Helpers.swift */; };
+		19F17A1D26F695B200D4F9DE /* BrowserContainerViewController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F17A1C26F695B200D4F9DE /* BrowserContainerViewController+Keyboard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 		196DD6C726EFAC620096A9FB /* BrowserTabContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabContentView.swift; sourceTree = "<group>"; };
 		19F17A1826F3F2B500D4F9DE /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
 		19F17A1A26F3F59800D4F9DE /* NSNotification+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNotification+Helpers.swift"; sourceTree = "<group>"; };
+		19F17A1C26F695B200D4F9DE /* BrowserContainerViewController+Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserContainerViewController+Keyboard.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				1903644A26EB944700B82B1C /* BrowserContainerViewController.swift */,
+				19F17A1C26F695B200D4F9DE /* BrowserContainerViewController+Keyboard.swift */,
 				1903645326EB983D00B82B1C /* BrowserContainerContentView.swift */,
 			);
 			path = Container;
@@ -344,6 +347,7 @@
 			files = (
 				1903641826EB427D00B82B1C /* AppDelegate.swift in Sources */,
 				1903646426ED07F600B82B1C /* UIColor+Colors.swift in Sources */,
+				19F17A1D26F695B200D4F9DE /* BrowserContainerViewController+Keyboard.swift in Sources */,
 				19F17A1926F3F2B500D4F9DE /* KeyboardManager.swift in Sources */,
 				19F17A1B26F3F59800D4F9DE /* NSNotification+Helpers.swift in Sources */,
 				1903646126ECE03A00B82B1C /* BrowserAddressBar+TextField.swift in Sources */,

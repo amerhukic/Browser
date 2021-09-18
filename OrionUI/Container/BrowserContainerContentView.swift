@@ -9,27 +9,27 @@ import UIKit
 import SnapKit
 
 class BrowserContainerContentView: UIView {
-  private let tabsScrollView = UIScrollView()
-  private let tabsStackView = UIStackView()
-  private let addressBarsScrollView = UIScrollView()
-  private let addressBarsStackView = UIStackView()
-  private let addressBarKeyboardBackgroundView = UIView()
-  private let toolbar = BrowserToolbar()
-  private let overlayView = UIView()
+  let tabsScrollView = UIScrollView()
+  let tabsStackView = UIStackView()
+  let addressBarsScrollView = UIScrollView()
+  let addressBarsStackView = UIStackView()
+  let addressBarKeyboardBackgroundView = UIView()
+  let toolbar = BrowserToolbar()
+  let overlayView = UIView()
   
-  private let tabsStackViewSpacing = CGFloat(24)
-  private let addressBarsScrollViewBottomOffset = CGFloat(-38)
-  private let addressBarWidthOffset = CGFloat(-48)
-  private let addressBarsStackViewSidePadding = CGFloat(24)
-  private let addressBarsStackViewSpacing = CGFloat(4)
-  private let addressBarsHidingCenterOffset = CGFloat(30)
-  private var addressBarsScrollViewBottomConstraint: Constraint?
-  private var addressBarKeyboardBackgroundViewBottomConstraint: Constraint?
+  let tabsStackViewSpacing = CGFloat(24)
+  let addressBarsScrollViewBottomOffset = CGFloat(-38)
+  let addressBarWidthOffset = CGFloat(-48)
+  let addressBarsStackViewSidePadding = CGFloat(24)
+  let addressBarsStackViewSpacing = CGFloat(4)
+  let addressBarsHidingCenterOffset = CGFloat(30)
   
-  private var currentPage = CGFloat(0)
-  private lazy var pageWidth: CGFloat = {
+  var addressBarsScrollViewBottomConstraint: Constraint?
+  var addressBarKeyboardBackgroundViewBottomConstraint: Constraint?
+  
+  var addressBarPageWidth: CGFloat {
     frame.width + addressBarWidthOffset + addressBarsStackViewSpacing
-  }()
+  }
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -52,27 +52,6 @@ class BrowserContainerContentView: UIView {
     addressBar.snp.makeConstraints {
       $0.width.equalTo(self).offset(addressBarWidthOffset)
     }
-  }
-  
-  func updateStateForKeyboardAppearing(with keyboardHeight: CGFloat) {
-    // show overlay view
-    overlayView.alpha = 1
-
-    // show address bar gray background view
-    addressBarKeyboardBackgroundView.isHidden = false
-    addressBarKeyboardBackgroundViewBottomConstraint?.update(offset: -keyboardHeight)
-    addressBarsScrollViewBottomConstraint?.update(offset: -keyboardHeight)
-    
-    // move and hide address bars on left and right side of the current address bar
-    setSideAddressBarsHidden(true)
-  }
-  
-  func updateStateForKeyboardDisappearing() {
-    overlayView.alpha = 0
-    addressBarKeyboardBackgroundView.isHidden = true
-    addressBarKeyboardBackgroundViewBottomConstraint?.update(offset: 0)
-    addressBarsScrollViewBottomConstraint?.update(offset: addressBarsScrollViewBottomOffset)
-    setSideAddressBarsHidden(false)
   }
 }
 
@@ -124,7 +103,6 @@ private extension BrowserContainerContentView {
     addressBarsScrollView.showsHorizontalScrollIndicator = false
     addressBarsScrollView.showsVerticalScrollIndicator = false
     addressBarsScrollView.decelerationRate = .fast
-    addressBarsScrollView.delegate = self
     addSubview(addressBarsScrollView)
     addressBarsScrollView.snp.makeConstraints {
       addressBarsScrollViewBottomConstraint = $0.bottom.equalTo(safeAreaLayoutGuide).offset(addressBarsScrollViewBottomOffset).constraint
@@ -163,85 +141,5 @@ private extension BrowserContainerContentView {
     overlayView.snp.makeConstraints {
       $0.edges.equalToSuperview()
     }
-  }
-  
-  func setSideAddressBarsHidden(_ isHidden: Bool) {
-    let numberOfPages = addressBarsStackView.arrangedSubviews.count
-    let currentPage = Int(currentPage)
-    
-    if currentPage == 0 && numberOfPages > 1 {
-      let rightAddressBar = addressBarsStackView.arrangedSubviews[currentPage + 1]
-      setHidden(isHidden, forRightAddressBar: rightAddressBar)
-    }
-    
-    if currentPage > 0 {
-      let leftAddressBar = addressBarsStackView.arrangedSubviews[currentPage - 1]
-      setHidden(isHidden, forLeftAddressBar: leftAddressBar)
-      
-      if Int(currentPage) < (numberOfPages - 1) {
-        let rightAddressBar = addressBarsStackView.arrangedSubviews[currentPage + 1]
-        setHidden(isHidden, forRightAddressBar: rightAddressBar)
-      }
-    }
-  }
-  
-  func setHidden(_ isHidden: Bool, forRightAddressBar addressBar: UIView) {
-    if isHidden {
-      addressBar.center = CGPoint(x: addressBar.center.x + addressBarsHidingCenterOffset,
-                                  y: addressBar.center.y - addressBarsHidingCenterOffset)
-    } else {
-      addressBar.center = CGPoint(x: addressBar.center.x - addressBarsHidingCenterOffset,
-                                  y: addressBar.center.y + addressBarsHidingCenterOffset)
-    }
-    addressBar.alpha = isHidden ? 0 : 1
-  }
-  
-  func setHidden(_ isHidden: Bool, forLeftAddressBar addressBar: UIView) {
-    if isHidden {
-      addressBar.center = CGPoint(x: addressBar.center.x - addressBarsHidingCenterOffset,
-                                  y: addressBar.center.y - addressBarsHidingCenterOffset)
-    } else {
-      addressBar.center = CGPoint(x: addressBar.center.x + addressBarsHidingCenterOffset,
-                                  y: addressBar.center.y + addressBarsHidingCenterOffset)
-    }
-    addressBar.alpha = isHidden ? 0 : 1
-  }
-}
-
-extension BrowserContainerContentView: UIScrollViewDelegate {
-  func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-    currentPage = round(scrollView.contentOffset.x / pageWidth)
-  }
-  
-  func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    // width of one address bar page is address bar width + padding of `addressBarsStackViewSpacing / 2` from left and right side
-    // we need to exclude the leading and trailing offset of (24 - address bar stack view padding from one side) from the precentage calculation
-    let padding = 2 * (addressBarsStackViewSidePadding - (addressBarsStackViewSpacing) / 2)
-    let percentage = addressBarsScrollView.contentOffset.x / (addressBarsScrollView.contentSize.width - padding)
-    
-    // we need to add tabs stack view spacing to the tabs scroll view content width, because spacing after last page is missing (we don't have any padding on sides)
-    tabsScrollView.contentOffset.x = percentage * (tabsScrollView.contentSize.width + tabsStackViewSpacing)
-  }
-  
-  func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-    let finalXPosition = targetContentOffset.pointee.x
-    var nextPage: CGFloat
-    if velocity.x > 0 {
-      // swiping from right to left
-      nextPage = ceil(finalXPosition / pageWidth)
-    } else if velocity.x == 0 {
-      // no swiping - user lifted finger
-      nextPage = round(finalXPosition / pageWidth)
-    } else {
-      // swiping left to right
-      nextPage = floor(finalXPosition / pageWidth)
-    }
-    
-    if currentPage < nextPage {
-      currentPage += 1
-    } else if currentPage > nextPage {
-      currentPage -= 1
-    }
-    targetContentOffset.pointee = CGPoint(x: currentPage * pageWidth, y: targetContentOffset.pointee.y)
   }
 }
