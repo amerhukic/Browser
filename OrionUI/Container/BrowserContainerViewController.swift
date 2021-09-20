@@ -13,6 +13,7 @@ class BrowserContainerViewController: UIViewController {
   let keyboardManager = KeyboardManager()
   var isAddressBarActive = false
   var currentTabIndex = 0
+  var hasHiddenTab = false
   
   override func loadView() {
     view = contentView
@@ -23,7 +24,7 @@ class BrowserContainerViewController: UIViewController {
     setupNavigationBar()
     setupAddressBarsScrollView()
     setupKeyboardManager()
-    openNewTab()
+    openNewTab(isHidden: false)
   }
 }
 
@@ -40,41 +41,54 @@ private extension BrowserContainerViewController {
     contentView.addressBarsScrollView.delegate = self
   }
   
-  func openNewTab() {
-    addTabViewController()
-    addAddressBar()
+  func openNewTab(isHidden: Bool) {
+    addTabViewController(isHidden: isHidden)
+    addAddressBar(isHidden: isHidden)
   }
   
-  func addTabViewController() {
+  func addTabViewController(isHidden: Bool) {
     let tabViewController = BrowserTabViewController()
+    tabViewController.view.alpha = isHidden ? 0 : 1
+    tabViewController.view.transform = isHidden ? CGAffineTransform(scaleX: 0.8, y: 0.8) : .identity
     tabViewControllers.append(tabViewController)
-    contentView.addTabView(tabViewController.view)
+    contentView.tabsStackView.addArrangedSubview(tabViewController.view)
+    tabViewController.view.snp.makeConstraints {
+      $0.width.equalTo(contentView)
+    }
     addChild(tabViewController)
     tabViewController.didMove(toParent: self)
   }
   
-  func addAddressBar() {
+  func addAddressBar(isHidden: Bool) {
     let addressBar = BrowserAddressBar()
     addressBar.onBeginEditing = { [weak self] in
       self?.isAddressBarActive = true
     }
     addressBar.onGoTapped = { [weak self] text in
       guard let self = self else { return }
-      self.tabViewControllers[self.currentTabIndex].loadWebsite(urlString: text)
+      let tabViewController = self.tabViewControllers[self.currentTabIndex]
+      let isLastTab = (self.currentTabIndex == self.tabViewControllers.count - 1)
+      if isLastTab && !tabViewController.hasLoadedUrl {
+        self.openNewTab(isHidden: true)
+      }
+      tabViewController.loadWebsite(urlString: "https://news.ycombinator.com")
       self.dismissKeyboard()
     }
-    contentView.addAddressBar(addressBar)
+    contentView.addressBarsStackView.addArrangedSubview(addressBar)
+    addressBar.snp.makeConstraints {
+      $0.width.equalTo(contentView).offset(contentView.addressBarWidthOffset)
+    }
+    
+    if isHidden {
+      hasHiddenTab = true
+      addressBar.plusOverlayView.isHidden = false
+      addressBar.containerViewWidthConstraint?.update(offset: contentView.addressBarContainerHidingWidthOffset)
+      addressBar.containerView.alpha = 0
+    }
   }
   
   func dismissKeyboard() {
     view.endEditing(true)
-  }
-}
-
-// MARK: Action methods
-private extension BrowserContainerViewController {
-  @objc func cancelButtonTapped() {
-    dismissKeyboard()
   }
 }
 
@@ -91,6 +105,36 @@ extension BrowserContainerViewController: UIScrollViewDelegate {
     
     // we need to add tabs stack view spacing to the tabs scroll view content width, because spacing after last page is missing (we don't have any padding on sides)
     contentView.tabsScrollView.contentOffset.x = percentage * (contentView.tabsScrollView.contentSize.width + contentView.tabsStackViewSpacing)
+
+    // if it is one tab before last tab then we should animate the appearance of the last hidden tab
+    if currentTabIndex == (tabViewControllers.count - 2) && hasHiddenTab {
+      let currentXOffset = contentView.addressBarsScrollView.contentOffset.x
+      let addressBarWidth = contentView.frame.width + contentView.addressBarWidthOffset
+      let hiddenAddressBarContainerWidth = addressBarWidth + contentView.addressBarContainerHidingWidthOffset
+      let offsetBeforeStartingStretching = CGFloat(currentTabIndex) * contentView.addressBarPageWidth + hiddenAddressBarContainerWidth
+      
+      // animate alpha of hidden address bar
+      let percentage = 1 - (offsetBeforeStartingStretching - currentXOffset) / hiddenAddressBarContainerWidth
+      guard let hiddenAddressBar = contentView.addressBars.last else { return }
+      hiddenAddressBar.containerView.alpha = min(1, 1.2 * percentage)
+      
+      // animate stretching of hidden address bar
+      if currentXOffset > offsetBeforeStartingStretching {
+        let diff = currentXOffset - offsetBeforeStartingStretching
+        hiddenAddressBar.containerViewWidthConstraint?.update(offset: contentView.addressBarContainerHidingWidthOffset + diff)
+      }
+    }
+    
+    // finish hidden tab animation and show hidden tab
+    if currentTabIndex == (tabViewControllers.count - 1) && hasHiddenTab {
+      let currentXOffset = contentView.addressBarsScrollView.contentOffset.x
+      let hiddenAddressBarContainerWidth = contentView.frame.width + contentView.addressBarWidthOffset + contentView.addressBarContainerHidingWidthOffset
+      let offsetBeforeStartingStretching = CGFloat(currentTabIndex - 1) * contentView.addressBarPageWidth + hiddenAddressBarContainerWidth
+      let diff = currentXOffset - offsetBeforeStartingStretching
+      guard let hiddenAddressBar = contentView.addressBars.last else { return }
+      let widthOffset = contentView.addressBarContainerHidingWidthOffset + diff
+      hiddenAddressBar.containerViewWidthConstraint?.update(offset: widthOffset < 0 ? widthOffset : 0)
+    }
   }
   
   func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -114,5 +158,30 @@ extension BrowserContainerViewController: UIScrollViewDelegate {
     }
     targetContentOffset.pointee = CGPoint(x: CGFloat(currentTabIndex) * contentView.addressBarPageWidth,
                                           y: targetContentOffset.pointee.y)
+    
+    // finish hidden tab animation and show hidden tab
+    if currentTabIndex == (tabViewControllers.count - 1) && hasHiddenTab {
+      let hiddenTabViewController = tabViewControllers.last
+      let hiddenAddressBar = contentView.addressBars.last
+      UIView.animate(withDuration: 0.3) {
+        hiddenTabViewController?.view.transform = .identity
+        hiddenTabViewController?.view.alpha = 1
+        hiddenAddressBar?.plusOverlayView.alpha = 0
+        hiddenAddressBar?.containerView.alpha = 1
+      }
+    }
+  }
+  
+  func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    if currentTabIndex == tabViewControllers.count - 1 {
+      hasHiddenTab = false
+    }
+  }
+}
+
+// MARK: Action methods
+private extension BrowserContainerViewController {
+  @objc func cancelButtonTapped() {
+    dismissKeyboard()
   }
 }

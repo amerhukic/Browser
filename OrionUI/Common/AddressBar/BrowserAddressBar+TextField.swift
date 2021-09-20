@@ -85,6 +85,8 @@ private extension BrowserAddressBar.TextField {
     returnKeyType = .go
     leftViewMode = .always
     rightViewMode = .always
+    autocorrectionType = .no
+    keyboardType = .URL
     setupMagnifyingGlassImage()
     setupAaButton()
     setupReloadButton()

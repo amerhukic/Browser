@@ -20,6 +20,7 @@ class BrowserContainerContentView: UIView {
   let tabsStackViewSpacing = CGFloat(24)
   let addressBarsScrollViewBottomOffset = CGFloat(-38)
   let addressBarWidthOffset = CGFloat(-48)
+  let addressBarContainerHidingWidthOffset = CGFloat(-200)
   let addressBarsStackViewSidePadding = CGFloat(24)
   let addressBarsStackViewSpacing = CGFloat(4)
   let addressBarsHidingCenterOffset = CGFloat(30)
@@ -31,6 +32,10 @@ class BrowserContainerContentView: UIView {
     frame.width + addressBarWidthOffset + addressBarsStackViewSpacing
   }
   
+  var addressBars: [BrowserAddressBar] {
+    addressBarsStackView.arrangedSubviews as? [BrowserAddressBar] ?? []
+  }
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
     setupView()
@@ -38,20 +43,6 @@ class BrowserContainerContentView: UIView {
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
-  }
-  
-  func addTabView(_ view: UIView) {
-    tabsStackView.addArrangedSubview(view)
-    view.snp.makeConstraints {
-      $0.width.equalTo(self)
-    }
-  }
-  
-  func addAddressBar(_ addressBar: BrowserAddressBar) {
-    addressBarsStackView.addArrangedSubview(addressBar)
-    addressBar.snp.makeConstraints {
-      $0.width.equalTo(self).offset(addressBarWidthOffset)
-    }
   }
 }
 

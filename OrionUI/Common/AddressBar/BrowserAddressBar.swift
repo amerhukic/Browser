@@ -9,11 +9,14 @@ import UIKit
 import SnapKit
 
 class BrowserAddressBar: UIView {
+  let containerView = UIView()
   private let shadowView = UIView()
   private let textField = TextField()
+  let plusOverlayView = UIView()
   private let textFieldSidePadding = CGFloat(4)
   private var textFieldLeadingConstraint: Constraint?
   private var textFieldTrailingConstraint: Constraint?
+  var containerViewWidthConstraint: Constraint?
 
   var onBeginEditing: (() -> Void)?
   var onGoTapped: ((String) -> Void)?
@@ -29,15 +32,26 @@ class BrowserAddressBar: UIView {
   
   override func layoutSubviews() {
     super.layoutSubviews()
-    shadowView.layer.shadowPath = UIBezierPath(rect: textField.frame).cgPath
+    shadowView.layer.shadowPath = UIBezierPath(rect: containerView.frame).cgPath
   }
 }
 
 private extension BrowserAddressBar {
   func setupView() {
     layer.masksToBounds = false
+    containerView.layer.masksToBounds = false
+    setupContainerView()
     setupShadowView()
     setupTextField()
+    setupPlusOverlayView()
+  }
+  
+  func setupContainerView() {
+    addSubview(containerView)
+    containerView.snp.makeConstraints {
+      $0.top.leading.bottom.equalToSuperview()
+      containerViewWidthConstraint = $0.width.equalToSuperview().constraint
+    }
   }
   
   func setupShadowView() {
@@ -46,12 +60,12 @@ private extension BrowserAddressBar {
     shadowView.layer.shadowOffset = CGSize(width: 0, height: 0)
     shadowView.layer.shadowOpacity = 0.35
     shadowView.layer.shadowRadius = 12
-    addSubview(shadowView)
+    containerView.addSubview(shadowView)
   }
   
   func setupTextField() {
     textField.delegate = self
-    addSubview(textField)
+    containerView.addSubview(textField)
     textField.snp.makeConstraints {
       $0.height.equalTo(46)
       $0.top.bottom.equalToSuperview().inset(8)
@@ -60,6 +74,24 @@ private extension BrowserAddressBar {
     }
   }
   
+  func setupPlusOverlayView() {
+    let imageView = UIImageView(image: UIImage(systemName: "plus"))
+    imageView.contentMode = .scaleAspectFit
+    plusOverlayView.addSubview(imageView)
+    imageView.snp.makeConstraints {
+      $0.center.equalToSuperview()
+      $0.width.height.equalTo(24)
+    }
+    
+    plusOverlayView.layer.cornerRadius = textField.layer.cornerRadius
+    plusOverlayView.backgroundColor = .white
+    plusOverlayView.isHidden = true
+    containerView.addSubview(plusOverlayView)
+    plusOverlayView.snp.makeConstraints {
+      $0.edges.equalTo(textField)
+    }
+  }
+
   func showEditingState() {
     shadowView.isHidden = true
     textFieldLeadingConstraint?.update(offset: 0)

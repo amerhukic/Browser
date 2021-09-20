@@ -70,7 +70,7 @@ private extension BrowserContainerViewController {
       let leftAddressBar = contentView.addressBarsStackView.arrangedSubviews[currentPage - 1]
       setHidden(isHidden, forLeftAddressBar: leftAddressBar)
       
-      if Int(currentPage) < (numberOfPages - 1) {
+      if currentPage < numberOfPages - 1 {
         let rightAddressBar = contentView.addressBarsStackView.arrangedSubviews[currentPage + 1]
         setHidden(isHidden, forRightAddressBar: rightAddressBar)
       }
