@@ -91,6 +91,7 @@ private extension BrowserContainerContentView {
   }
   
   func setupAddressBarsScrollView() {
+    addressBarsScrollView.clipsToBounds = false
     addressBarsScrollView.showsHorizontalScrollIndicator = false
     addressBarsScrollView.showsVerticalScrollIndicator = false
     addressBarsScrollView.decelerationRate = .fast
@@ -102,6 +103,7 @@ private extension BrowserContainerContentView {
   }
   
   func setupAddressBarsStackView() {
+    addressBarsStackView.clipsToBounds = false
     addressBarsStackView.axis = .horizontal
     addressBarsStackView.alignment = .fill
     addressBarsStackView.distribution = .fill

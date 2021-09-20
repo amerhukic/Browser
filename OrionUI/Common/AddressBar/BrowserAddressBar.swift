@@ -58,8 +58,8 @@ private extension BrowserAddressBar {
     shadowView.layer.masksToBounds = false
     shadowView.layer.shadowColor = UIColor.lightGray.cgColor
     shadowView.layer.shadowOffset = CGSize(width: 0, height: 0)
-    shadowView.layer.shadowOpacity = 0.35
-    shadowView.layer.shadowRadius = 12
+    shadowView.layer.shadowOpacity = 0.15
+    shadowView.layer.shadowRadius = 4
     containerView.addSubview(shadowView)
   }
   
