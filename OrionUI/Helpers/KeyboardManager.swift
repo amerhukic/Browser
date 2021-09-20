@@ -8,6 +8,7 @@
 import UIKit
 
 class KeyboardManager {
+  private var isKeyboardShown = false
   var onKeyboardWillShow: ((NSNotification) -> Void)?
   var onKeyboardWillHide: ((NSNotification) -> Void)?
 
@@ -38,10 +39,13 @@ private extension KeyboardManager {
 // MARK: Action methods
 private extension KeyboardManager {
   @objc func keyboardWillShow(_ notification: NSNotification) {
+    guard !isKeyboardShown else { return }
+    isKeyboardShown = true
     onKeyboardWillShow?(notification)
   }
   
   @objc func keyboardWillHide(_ notification: NSNotification) {
     onKeyboardWillHide?(notification)
+    isKeyboardShown = false
   }
 }
