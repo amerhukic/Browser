@@ -12,6 +12,7 @@ class BrowserAddressBar: UIView {
   let containerView = UIView()
   private let shadowView = UIView()
   private let textField = TextField()
+  private let domainLabel = UILabel()
   let plusOverlayView = UIView()
   private let textFieldSidePadding = CGFloat(4)
   private var textFieldLeadingConstraint: Constraint?
@@ -43,6 +44,7 @@ private extension BrowserAddressBar {
     setupContainerView()
     setupShadowView()
     setupTextField()
+    setupDomainLabel()
     setupPlusOverlayView()
   }
   
@@ -74,6 +76,15 @@ private extension BrowserAddressBar {
     }
   }
   
+  func setupDomainLabel() {
+    domainLabel.textAlignment = .center
+    addSubview(domainLabel)
+    domainLabel.snp.makeConstraints {
+      $0.center.equalToSuperview()
+      $0.width.equalToSuperview().multipliedBy(0.65)
+    }
+  }
+  
   func setupPlusOverlayView() {
     let imageView = UIImageView(image: UIImage(systemName: "plus"))
     imageView.contentMode = .scaleAspectFit
@@ -94,12 +105,14 @@ private extension BrowserAddressBar {
 
   func showEditingState() {
     shadowView.isHidden = true
+    domainLabel.alpha = 0
     textFieldLeadingConstraint?.update(offset: 0)
     textFieldTrailingConstraint?.update(offset: 0)
   }
   
   func showInactiveState() {
     shadowView.isHidden = false
+    domainLabel.alpha = 1
     textFieldLeadingConstraint?.update(offset: textFieldSidePadding)
     textFieldTrailingConstraint?.update(offset: -textFieldSidePadding)
   }

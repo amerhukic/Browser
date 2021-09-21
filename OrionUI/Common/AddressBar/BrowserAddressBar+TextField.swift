@@ -25,16 +25,16 @@ extension BrowserAddressBar {
       didSet {
         switch activityState {
         case .editing:
+          placeholder = nil
           leftView = paddingView
           rightView = nil
-          textAlignment = .natural
-          placeholder = nil
           selectAll(nil)
+          textColor = .black
         case .inactive:
+          showDefaultPlaceholder()
           leftView = hasText ? aAButton : magnifyingGlassImageView
           rightView = hasText ? reloadButton : nil
-          textAlignment = hasText ? .center : .natural
-          showDefaultPlaceholder()
+          textColor = .clear
         }
       }
     }
