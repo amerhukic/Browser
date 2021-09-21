@@ -9,14 +9,15 @@ import UIKit
 import SnapKit
 
 class BrowserAddressBar: UIView {
-  let containerView = UIView()
+  private let containerView = UIView()
   private let shadowView = UIView()
-  private let textField = TextField()
   private let domainLabel = UILabel()
-  let plusOverlayView = UIView()
+  private let plusOverlayView = UIView()
+  private let textField = TextField()
   private let textFieldSidePadding = CGFloat(4)
   private var textFieldLeadingConstraint: Constraint?
   private var textFieldTrailingConstraint: Constraint?
+  private var text: String?
   var containerViewWidthConstraint: Constraint?
 
   var onBeginEditing: (() -> Void)?
@@ -34,6 +35,14 @@ class BrowserAddressBar: UIView {
   override func layoutSubviews() {
     super.layoutSubviews()
     shadowView.layer.shadowPath = UIBezierPath(rect: containerView.frame).cgPath
+  }
+  
+  func setContainerAlpha(_ alpha: CGFloat) {
+    containerView.alpha = alpha
+  }
+  
+  func setPlusOverlayAlpha(_ alpha: CGFloat) {
+    plusOverlayView.alpha = alpha
   }
 }
 
@@ -96,7 +105,7 @@ private extension BrowserAddressBar {
     
     plusOverlayView.layer.cornerRadius = textField.layer.cornerRadius
     plusOverlayView.backgroundColor = .white
-    plusOverlayView.isHidden = true
+    plusOverlayView.alpha = 0
     containerView.addSubview(plusOverlayView)
     plusOverlayView.snp.makeConstraints {
       $0.edges.equalTo(textField)
@@ -121,18 +130,21 @@ private extension BrowserAddressBar {
 extension BrowserAddressBar: UITextFieldDelegate {
   func textFieldDidBeginEditing(_: UITextField) {
     onBeginEditing?()
+    textField.text = text
     showEditingState()
     textField.activityState = .editing
   }
   
   func textFieldDidEndEditing(_: UITextField) {
+    textField.text = text
     showInactiveState()
     textField.activityState = .inactive
   }
   
   func textFieldShouldReturn(_: UITextField) -> Bool {
+    text = textField.text
     showInactiveState()
-    onGoTapped?(textField.text ?? "")
+    onGoTapped?(text ?? "")
     return true
   }
 }

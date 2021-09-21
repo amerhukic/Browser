@@ -92,9 +92,9 @@ private extension BrowserContainerViewController {
     
     if isHidden {
       hasHiddenTab = true
-      addressBar.plusOverlayView.isHidden = false
       addressBar.containerViewWidthConstraint?.update(offset: contentView.addressBarContainerHidingWidthOffset)
-      addressBar.containerView.alpha = 0
+      addressBar.setContainerAlpha(0)
+      addressBar.setPlusOverlayAlpha(1)
     }
   }
   
@@ -127,7 +127,7 @@ extension BrowserContainerViewController: UIScrollViewDelegate {
       // animate alpha of hidden address bar
       let percentage = 1 - (offsetBeforeStartingStretching - currentXOffset) / hiddenAddressBarContainerWidth
       guard let hiddenAddressBar = contentView.addressBars.last else { return }
-      hiddenAddressBar.containerView.alpha = min(1, 1.2 * percentage)
+      hiddenAddressBar.setContainerAlpha(min(1, 1.2 * percentage))
       
       // animate stretching of hidden address bar
       if currentXOffset > offsetBeforeStartingStretching {
@@ -177,8 +177,8 @@ extension BrowserContainerViewController: UIScrollViewDelegate {
       UIView.animate(withDuration: 0.3) {
         hiddenTabViewController?.view.transform = .identity
         hiddenTabViewController?.view.alpha = 1
-        hiddenAddressBar?.plusOverlayView.alpha = 0
-        hiddenAddressBar?.containerView.alpha = 1
+        hiddenAddressBar?.setPlusOverlayAlpha(0)
+        hiddenAddressBar?.setContainerAlpha(1)
       }
     }
   }
