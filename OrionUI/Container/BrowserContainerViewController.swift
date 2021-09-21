@@ -10,10 +10,19 @@ import UIKit
 class BrowserContainerViewController: UIViewController {
   let contentView = BrowserContainerContentView()
   var tabViewControllers = [BrowserTabViewController]()
-  let keyboardManager = KeyboardManager()
   var isAddressBarActive = false
   var currentTabIndex = 0
   var hasHiddenTab = false
+  let viewModel: BrowserContainerViewModel
+
+  init(viewModel: BrowserContainerViewModel = .init()) {
+    self.viewModel = viewModel
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   override func loadView() {
     view = contentView
@@ -71,7 +80,9 @@ private extension BrowserContainerViewController {
       if isLastTab && !tabViewController.hasLoadedUrl {
         self.openNewTab(isHidden: true)
       }
-      tabViewController.loadWebsite(urlString: "https://news.ycombinator.com")
+      if let url = self.viewModel.getURL(for: text) {
+        tabViewController.loadWebsite(from: url)
+      }
       self.dismissKeyboard()
     }
     contentView.addressBarsStackView.addArrangedSubview(addressBar)

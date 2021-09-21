@@ -19,8 +19,7 @@ class BrowserTabViewController: UIViewController {
     super.viewDidLoad()
   }
   
-  func loadWebsite(urlString: String) {
-    guard let url = URL(string: urlString) else { return }
+  func loadWebsite(from url: URL) {
     contentView.webView.load(URLRequest(url: url))
     hasLoadedUrl = true
   }

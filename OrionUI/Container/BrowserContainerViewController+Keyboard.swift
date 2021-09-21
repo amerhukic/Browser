@@ -9,22 +9,20 @@ import UIKit
 
 extension BrowserContainerViewController {
   func setupKeyboardManager() {
-    keyboardManager.onKeyboardWillShow = { [weak self] notification in
+    viewModel.setKeyboardHandler(onKeyboardWillShow: { [weak self] notification in
       guard let self = self, self.isAddressBarActive else { return }
       self.navigationController?.setNavigationBarHidden(false, animated: true)
       self.animateWithKeyboard(for: notification) { keyboardFrame in
         self.updateStateForKeyboardAppearing(with: keyboardFrame.height)
       }
-    }
-    
-    keyboardManager.onKeyboardWillHide = { [weak self] notification in
+    }, onKeyboardWillHide: { [weak self] notification in
       guard let self = self, self.isAddressBarActive else { return }
       self.isAddressBarActive = false
       self.navigationController?.setNavigationBarHidden(true, animated: true)
       self.animateWithKeyboard(for: notification) { _ in
         self.updateStateForKeyboardDisappearing()
       }
-    }
+    })
   }
 }
 
