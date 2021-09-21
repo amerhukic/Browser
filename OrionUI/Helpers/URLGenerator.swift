@@ -15,6 +15,7 @@ class URLGenerator {
   }
   
   func getURL(for text: String) -> URL? {
+    let text = text.lowercased()
     guard urlValidator.isValidURL(text) else {
       return getGoogleSearchURL(for: text)
     }

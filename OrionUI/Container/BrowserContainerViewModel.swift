@@ -26,4 +26,12 @@ class BrowserContainerViewModel {
   func getURL(for text: String) -> URL? {
     urlGenerator.getURL(for: text)
   }
+  
+  func getDomain(from url: URL) -> String {
+    guard var domain = url.host else { return url.absoluteString }
+    if domain.lowercased().hasPrefix("www.") {
+      domain.removeFirst(4)
+    }
+    return domain
+  }
 }

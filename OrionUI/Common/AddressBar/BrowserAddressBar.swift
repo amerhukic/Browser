@@ -44,6 +44,10 @@ class BrowserAddressBar: UIView {
   func setPlusOverlayAlpha(_ alpha: CGFloat) {
     plusOverlayView.alpha = alpha
   }
+  
+  func setDomain(_ domain: String) {
+    domainLabel.text = domain
+  }
 }
 
 private extension BrowserAddressBar {

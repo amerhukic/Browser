@@ -73,7 +73,7 @@ private extension BrowserContainerViewController {
     addressBar.onBeginEditing = { [weak self] in
       self?.isAddressBarActive = true
     }
-    addressBar.onGoTapped = { [weak self] text in
+    addressBar.onGoTapped = { [weak self, weak addressBar] text in
       guard let self = self else { return }
       let tabViewController = self.tabViewControllers[self.currentTabIndex]
       let isLastTab = (self.currentTabIndex == self.tabViewControllers.count - 1)
@@ -81,6 +81,7 @@ private extension BrowserContainerViewController {
         self.openNewTab(isHidden: true)
       }
       if let url = self.viewModel.getURL(for: text) {
+        addressBar?.setDomain(self.viewModel.getDomain(from: url))
         tabViewController.loadWebsite(from: url)
       }
       self.dismissKeyboard()

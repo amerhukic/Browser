@@ -86,6 +86,7 @@ private extension BrowserAddressBar.TextField {
     leftViewMode = .always
     rightViewMode = .always
     autocorrectionType = .no
+    autocapitalizationType = .none
     keyboardType = .URL
     setupMagnifyingGlassImage()
     setupAaButton()
