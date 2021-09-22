@@ -51,27 +51,16 @@ private extension BrowserContainerViewController {
     contentView.overlayView.alpha = 0
     contentView.addressBarKeyboardBackgroundView.isHidden = true
     contentView.addressBarKeyboardBackgroundViewBottomConstraint?.update(offset: 0)
-    contentView.addressBarsScrollViewBottomConstraint?.update(offset: contentView.addressBarsScrollViewBottomOffset)
+    contentView.addressBarsScrollViewBottomConstraint?.update(offset: contentView.addressBarsScrollViewExpandingFullyBottomOffset)
     setSideAddressBarsHidden(false)
   }
   
   func setSideAddressBarsHidden(_ isHidden: Bool) {
-    let numberOfPages = tabViewControllers.count
-    let currentPage = Int(currentTabIndex)
-    
-    if currentPage == 0 && numberOfPages > 1 {
-      let rightAddressBar = contentView.addressBarsStackView.arrangedSubviews[currentPage + 1]
-      setHidden(isHidden, forRightAddressBar: rightAddressBar)
-    }
-    
-    if currentPage > 0 {
-      let leftAddressBar = contentView.addressBarsStackView.arrangedSubviews[currentPage - 1]
+    if let leftAddressBar = leftAddressBar {
       setHidden(isHidden, forLeftAddressBar: leftAddressBar)
-      
-      if currentPage < numberOfPages - 1 {
-        let rightAddressBar = contentView.addressBarsStackView.arrangedSubviews[currentPage + 1]
-        setHidden(isHidden, forRightAddressBar: rightAddressBar)
-      }
+    }
+    if let rightAddressBar = rightAddressBar {
+      setHidden(isHidden, forRightAddressBar: rightAddressBar)
     }
   }
   

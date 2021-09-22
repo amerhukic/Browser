@@ -8,13 +8,30 @@
 import UIKit
 
 class BrowserContainerViewController: UIViewController {
+  let viewModel: BrowserContainerViewModel
   let contentView = BrowserContainerContentView()
   var tabViewControllers = [BrowserTabViewController]()
+  
+  // Address bar animation properties
   var isAddressBarActive = false
-  var currentTabIndex = 0
   var hasHiddenTab = false
-  let viewModel: BrowserContainerViewModel
-
+  var currentTabIndex = 0
+  
+  // Toolbar animation properties
+  var collapsingToolbarAnimator: UIViewPropertyAnimator?
+  var expandingToolbarAnimator: UIViewPropertyAnimator?
+  var isCollapsed = false
+  
+  var currentAddressBar: BrowserAddressBar {
+    contentView.addressBars[currentTabIndex]
+  }
+  var leftAddressBar: BrowserAddressBar? {
+    contentView.addressBars[safe: currentTabIndex - 1]
+  }
+  var rightAddressBar: BrowserAddressBar? {
+    contentView.addressBars[safe: currentTabIndex + 1]
+  }
+  
   init(viewModel: BrowserContainerViewModel = .init()) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
@@ -59,6 +76,7 @@ private extension BrowserContainerViewController {
     let tabViewController = BrowserTabViewController()
     tabViewController.view.alpha = isHidden ? 0 : 1
     tabViewController.view.transform = isHidden ? CGAffineTransform(scaleX: 0.8, y: 0.8) : .identity
+    tabViewController.delegate = self
     tabViewControllers.append(tabViewController)
     contentView.tabsStackView.addArrangedSubview(tabViewController.view)
     tabViewController.view.snp.makeConstraints {

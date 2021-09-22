@@ -9,9 +9,9 @@ import UIKit
 import SnapKit
 
 class BrowserAddressBar: UIView {
-  private let containerView = UIView()
+  let containerView = UIView()
   private let shadowView = UIView()
-  private let domainLabel = UILabel()
+  let domainLabel = UILabel()
   private let plusOverlayView = UIView()
   private let textField = TextField()
   private let textFieldSidePadding = CGFloat(4)

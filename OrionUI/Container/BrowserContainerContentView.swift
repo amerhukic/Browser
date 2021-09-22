@@ -18,15 +18,25 @@ class BrowserContainerContentView: UIView {
   let overlayView = UIView()
   
   let tabsStackViewSpacing = CGFloat(24)
-  let addressBarsScrollViewBottomOffset = CGFloat(-38)
   let addressBarWidthOffset = CGFloat(-48)
   let addressBarContainerHidingWidthOffset = CGFloat(-200)
   let addressBarsStackViewSidePadding = CGFloat(24)
   let addressBarsStackViewSpacing = CGFloat(4)
   let addressBarsHidingCenterOffset = CGFloat(30)
   
+  // Collapsing and expanding constants
+  let addressBarsScrollViewExpandingHalfwayBottomOffset = CGFloat(-22)
+  let addressBarsScrollViewExpandingFullyBottomOffset = CGFloat(-38)
+  let addressBarsScrollViewCollapsingHalfwayBottomOffset = CGFloat(-8)
+  let addressBarsScrollViewCollapsingFullyBottomOffset = CGFloat(20)
+  let toolbarCollapsingHalfwayBottomOffset = CGFloat(30)
+  let toolbarCollapsingFullyBottomOffset = CGFloat(80)
+  let toolbarExpandingHalfwayBottomOffset = CGFloat(40)
+  let toolbarExpandingFullyBottomOffset = CGFloat(0)
+
   var addressBarsScrollViewBottomConstraint: Constraint?
   var addressBarKeyboardBackgroundViewBottomConstraint: Constraint?
+  var toolbarBottomConstraint: Constraint?
   
   var addressBarPageWidth: CGFloat {
     frame.width + addressBarWidthOffset + addressBarsStackViewSpacing
@@ -85,7 +95,7 @@ private extension BrowserContainerContentView {
     addSubview(toolbar)
     toolbar.snp.makeConstraints {
       $0.leading.trailing.equalToSuperview()
-      $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
+      toolbarBottomConstraint = $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).constraint
       $0.height.equalTo(100)
     }
   }
@@ -97,7 +107,7 @@ private extension BrowserContainerContentView {
     addressBarsScrollView.decelerationRate = .fast
     addSubview(addressBarsScrollView)
     addressBarsScrollView.snp.makeConstraints {
-      addressBarsScrollViewBottomConstraint = $0.bottom.equalTo(safeAreaLayoutGuide).offset(addressBarsScrollViewBottomOffset).constraint
+      addressBarsScrollViewBottomConstraint = $0.bottom.equalTo(safeAreaLayoutGuide).offset(addressBarsScrollViewExpandingFullyBottomOffset).constraint
       $0.leading.trailing.equalToSuperview()
     }
   }
