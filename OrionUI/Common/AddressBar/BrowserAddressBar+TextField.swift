@@ -77,6 +77,7 @@ extension BrowserAddressBar {
   }
 }
 
+// MARK: Helper methods
 private extension BrowserAddressBar.TextField {
   func setupView() {
     layer.cornerRadius = 12
@@ -87,7 +88,7 @@ private extension BrowserAddressBar.TextField {
     rightViewMode = .always
     autocorrectionType = .no
     autocapitalizationType = .none
-    keyboardType = .URL
+    keyboardType = .webSearch
     enablesReturnKeyAutomatically = true
     clipsToBounds = true
     setupMagnifyingGlassImage()

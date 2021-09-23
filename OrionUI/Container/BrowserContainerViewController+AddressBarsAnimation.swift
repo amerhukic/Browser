@@ -15,7 +15,7 @@ extension BrowserContainerViewController: UIScrollViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     // width of one address bar page is address bar width + padding of `addressBarsStackViewSpacing / 2` from left and right side
     // we need to exclude the leading and trailing offset of (24 - address bar stack view padding from one side) from the precentage calculation
-    let padding = 2 * (contentView.addressBarsStackViewSidePadding - (contentView.addressBarsStackViewSpacing) / 2)
+    let padding = 2 * (contentView.addressBarsStackViewSidePadding - contentView.addressBarsStackViewSpacing / 2)
     let percentage = contentView.addressBarsScrollView.contentOffset.x / (contentView.addressBarsScrollView.contentSize.width - padding)
     
     // we need to add tabs stack view spacing to the tabs scroll view content width, because spacing after last page is missing (we don't have any padding on sides)
@@ -31,7 +31,7 @@ extension BrowserContainerViewController: UIScrollViewDelegate {
       // animate alpha of hidden address bar
       let percentage = 1 - (offsetBeforeStartingStretching - currentXOffset) / hiddenAddressBarContainerWidth
       guard let hiddenAddressBar = contentView.addressBars.last else { return }
-      hiddenAddressBar.setContainerAlpha(min(1, 1.2 * percentage))
+      hiddenAddressBar.containerView.alpha = min(1, 1.2 * percentage)
       
       // animate stretching of hidden address bar
       if currentXOffset > offsetBeforeStartingStretching {
@@ -81,8 +81,8 @@ extension BrowserContainerViewController: UIScrollViewDelegate {
       UIView.animate(withDuration: 0.3) {
         hiddenTabViewController?.view.transform = .identity
         hiddenTabViewController?.view.alpha = 1
-        hiddenAddressBar?.setPlusOverlayAlpha(0)
-        hiddenAddressBar?.setContainerAlpha(1)
+        hiddenAddressBar?.plusOverlayView.alpha = 0
+        hiddenAddressBar?.containerView.alpha = 1
       }
     }
   }

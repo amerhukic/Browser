@@ -26,6 +26,7 @@ extension BrowserContainerViewController {
   }
 }
 
+// MARK: Helper methods
 private extension BrowserContainerViewController {
   func animateWithKeyboard(for notification: NSNotification, animation: ((CGRect) -> Void)?) {
     guard let frame = notification.keyboardFrame,

@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 
 class BrowserTabContentView: UIView {
-  let emptyView = BrowserTabEmptyView()
+  let emptyStateView = BrowserTabEmptyStateView()
   let webView = WKWebView()
   
   override init(frame: CGRect) {
@@ -22,12 +22,13 @@ class BrowserTabContentView: UIView {
   }
 }
 
+// MARK: Helper methods
 private extension BrowserTabContentView {
   func setupView() {
     backgroundColor = .white
     setupShadow()
     setupWebView()
-    setupEmptyView()
+    setupEmptyStateView()
   }
   
   func setupShadow() {
@@ -48,10 +49,10 @@ private extension BrowserTabContentView {
     }
   }
   
-  func setupEmptyView() {
-    emptyView.alpha = 0
-    addSubview(emptyView)
-    emptyView.snp.makeConstraints {
+  func setupEmptyStateView() {
+    emptyStateView.alpha = 0
+    addSubview(emptyStateView)
+    emptyStateView.snp.makeConstraints {
       $0.edges.equalToSuperview()
     }
   }

@@ -1,5 +1,5 @@
 //
-//  BrowserTabEmptyView.swift
+//  BrowserTabEmptyStateView.swift
 //  OrionUI
 //
 //  Created by Amer Hukić on 23. 9. 2021..
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BrowserTabEmptyView: UIView {
+class BrowserTabEmptyStateView: UIView {
   let imageView = UIImageView()
 
   override init(frame: CGRect) {
@@ -20,7 +20,8 @@ class BrowserTabEmptyView: UIView {
   }
 }
 
-private extension BrowserTabEmptyView {
+// MARK: Helper methods
+private extension BrowserTabEmptyStateView {
   func setupView() {
     backgroundColor = .white
     setupImageView()

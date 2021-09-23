@@ -95,14 +95,14 @@ private extension BrowserContainerViewController {
   }
   
   func setAddressBarContainersAlpha(_ alpha: CGFloat) {
-    currentAddressBar.setContainerAlpha(alpha)
-    leftAddressBar?.setContainerAlpha(alpha)
+    currentAddressBar.containerView.alpha = alpha
+    leftAddressBar?.containerView.alpha = alpha
     
     let rightAddressBarIndex = currentTabIndex + 1
     if !hasHiddenTab || rightAddressBarIndex < tabViewControllers.count - 1 {
       // modify the right address bar only if there is no hidden right address bar
       // or the current right address bar is not the last one
-      rightAddressBar?.setContainerAlpha(alpha)
+      rightAddressBar?.containerView.alpha = alpha
     }
   }
 }

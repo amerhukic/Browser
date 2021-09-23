@@ -20,6 +20,7 @@ class BrowserTabViewController: UIViewController {
   private var isScrolling = false
   private var startYOffset = CGFloat(0)
   private var loadingProgressObservation: NSKeyValueObservation?
+  private let estimatedProgressKeyPath = "estimatedProgress"
   var hasLoadedUrl = false
   weak var delegate: BrowserTabViewControllerDelegate?
   
@@ -33,7 +34,7 @@ class BrowserTabViewController: UIViewController {
   }
   
   override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-    guard keyPath == "estimatedProgress" else { return }
+    guard keyPath == estimatedProgressKeyPath else { return }
     delegate?.tabViewController(self, didChangeLoadingProgressTo: CGFloat(contentView.webView.estimatedProgress))
   }
   
@@ -46,14 +47,14 @@ class BrowserTabViewController: UIViewController {
   
   func showEmptyState() {
     UIView.animate(withDuration: 0.2) {
-      self.contentView.emptyView.alpha = 1
+      self.contentView.emptyStateView.alpha = 1
     }
   }
   
   func hideEmptyStateIfNeeded() {
     guard hasLoadedUrl else { return }
     UIView.animate(withDuration: 0.2) {
-      self.contentView.emptyView.alpha = 0
+      self.contentView.emptyStateView.alpha = 0
     }
   }
 }
@@ -63,7 +64,7 @@ private extension BrowserTabViewController {
   func setupWebView() {
     contentView.webView.scrollView.panGestureRecognizer.addTarget(self, action: #selector(handlePan(_:)))
     contentView.webView.navigationDelegate = self
-    contentView.webView.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
+    contentView.webView.addObserver(self, forKeyPath: estimatedProgressKeyPath, options: .new, context: nil)
   }
 }
 

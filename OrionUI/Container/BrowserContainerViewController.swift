@@ -8,9 +8,9 @@
 import UIKit
 
 class BrowserContainerViewController: UIViewController {
-  let viewModel: BrowserContainerViewModel
   let contentView = BrowserContainerContentView()
   var tabViewControllers = [BrowserTabViewController]()
+  let viewModel: BrowserContainerViewModel
   
   // Address bar animation properties
   var isAddressBarActive = false
@@ -107,8 +107,8 @@ private extension BrowserContainerViewController {
     if isHidden {
       hasHiddenTab = true
       addressBar.containerViewWidthConstraint?.update(offset: contentView.addressBarContainerHidingWidthOffset)
-      addressBar.setContainerAlpha(0)
-      addressBar.setPlusOverlayAlpha(1)
+      addressBar.containerView.alpha = 0
+      addressBar.plusOverlayView.alpha = 1
     }
   }
   
@@ -143,10 +143,12 @@ extension BrowserContainerViewController: BrowserAddressBarDelegate {
     let tabViewController = tabViewControllers[currentTabIndex]
     let isLastTab = currentTabIndex == tabViewControllers.count - 1
     if isLastTab && !tabViewController.hasLoadedUrl {
+      // if we started loading a URL and it is on the last tab then ->
+      // open a hidden tab so that we can prepare it for new tab animation if the user swipes to the left
       openNewTab(isHidden: true)
     }
     if let url = self.viewModel.getURL(for: text) {
-      addressBar.setDomain(viewModel.getDomain(from: url))
+      addressBar.domainLabel.text = viewModel.getDomain(from: url)
       tabViewController.loadWebsite(from: url)
     }
     dismissKeyboard()

@@ -14,18 +14,17 @@ protocol BrowserAddressBarDelegate: AnyObject {
 }
 
 class BrowserAddressBar: UIView {
-  let containerView = UIView()
+  private let progressView = UIProgressView()
   private let shadowView = UIView()
-  let domainLabel = UILabel()
-  private let plusOverlayView = UIView()
-  let textField = TextField()
+  private var text: String?
   private let textFieldSidePadding = CGFloat(4)
   private var textFieldLeadingConstraint: Constraint?
   private var textFieldTrailingConstraint: Constraint?
-  private var text: String?
-  private let progressView = UIProgressView()
+  let textField = TextField()
+  let domainLabel = UILabel()
+  let plusOverlayView = UIView()
+  let containerView = UIView()
   var containerViewWidthConstraint: Constraint?
-
   weak var delegate: BrowserAddressBarDelegate?
   
   override init(frame: CGRect) {
@@ -40,18 +39,6 @@ class BrowserAddressBar: UIView {
   override func layoutSubviews() {
     super.layoutSubviews()
     shadowView.layer.shadowPath = UIBezierPath(rect: containerView.frame).cgPath
-  }
-  
-  func setContainerAlpha(_ alpha: CGFloat) {
-    containerView.alpha = alpha
-  }
-  
-  func setPlusOverlayAlpha(_ alpha: CGFloat) {
-    plusOverlayView.alpha = alpha
-  }
-  
-  func setDomain(_ domain: String) {
-    domainLabel.text = domain
   }
   
   func setSideButtonsHidden(_ isHidden: Bool) {
@@ -72,6 +59,7 @@ class BrowserAddressBar: UIView {
   }
 }
 
+// MARK: Helper methods
 private extension BrowserAddressBar {
   func setupView() {
     layer.masksToBounds = false
@@ -181,6 +169,7 @@ private extension BrowserAddressBar {
   }
 }
 
+// MARK: UITextFieldDelegate
 extension BrowserAddressBar: UITextFieldDelegate {
   func textFieldDidBeginEditing(_: UITextField) {
     delegate?.addressBarDidBeginEditing()
