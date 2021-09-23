@@ -18,6 +18,7 @@ class BrowserAddressBar: UIView {
   private var textFieldLeadingConstraint: Constraint?
   private var textFieldTrailingConstraint: Constraint?
   private var text: String?
+  private let progressView = UIProgressView()
   var containerViewWidthConstraint: Constraint?
 
   var onBeginEditing: (() -> Void)?
@@ -55,6 +56,16 @@ class BrowserAddressBar: UIView {
       self.textField.rightView?.alpha = isHidden ? 0 : 1
     }
   }
+  
+  func setLoadingProgress(_ progress: CGFloat, animated: Bool) {
+    progressView.alpha = 1
+    setProgressViewProgress(progress: progress, animated: animated)
+    if progress >= 1 {
+      UIView.animate(withDuration: 0.2, delay: 0.3) {
+        self.progressView.alpha = 0
+      }
+    }
+  }
 }
 
 private extension BrowserAddressBar {
@@ -64,6 +75,7 @@ private extension BrowserAddressBar {
     setupContainerView()
     setupShadowView()
     setupTextField()
+    setupProgressView()
     setupDomainLabel()
     setupPlusOverlayView()
   }
@@ -93,6 +105,17 @@ private extension BrowserAddressBar {
       $0.top.bottom.equalToSuperview().inset(8)
       textFieldLeadingConstraint = $0.leading.equalToSuperview().offset(textFieldSidePadding).constraint
       textFieldTrailingConstraint = $0.trailing.equalToSuperview().offset(-textFieldSidePadding).constraint
+    }
+  }
+  
+  func setupProgressView() {
+    progressView.alpha = 0
+    progressView.progressTintColor = .loadingBarBlue
+    progressView.trackTintColor = .clear
+    textField.addSubview(progressView)
+    progressView.snp.makeConstraints {
+      $0.leading.trailing.bottom.equalToSuperview()
+      $0.height.equalTo(3)
     }
   }
   
@@ -135,6 +158,22 @@ private extension BrowserAddressBar {
     domainLabel.alpha = 1
     textFieldLeadingConstraint?.update(offset: textFieldSidePadding)
     textFieldTrailingConstraint?.update(offset: -textFieldSidePadding)
+  }
+  
+  func setProgressViewProgress(progress: CGFloat, animated: Bool) {
+    if animated {
+      progressView.setProgress(Float(progress), animated: true)
+      return
+    }
+    
+    if let layers = progressView.layer.sublayers {
+      layers.forEach { layer in
+        layer.removeAllAnimations()
+      }
+    }
+    progressView.setProgress(Float(progress), animated: false)
+    progressView.setNeedsLayout()
+    progressView.layoutIfNeeded()
   }
 }
 

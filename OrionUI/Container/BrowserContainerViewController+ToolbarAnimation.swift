@@ -109,7 +109,8 @@ private extension BrowserContainerViewController {
 
 // MARK: BrowserTabViewControllerDelegate
 extension BrowserContainerViewController: BrowserTabViewControllerDelegate {
-  func webViewDidScroll(yOffsetChange: CGFloat) {
+  // MARK: Toolbar collapsing/expanding bar animation handling
+  func tabViewControllerDidScroll(yOffsetChange: CGFloat) {
     let offsetChangeBeforeFullAnimation = CGFloat(30)
     let animationFractionComplete = abs(yOffsetChange) / offsetChangeBeforeFullAnimation
     let tresholdBeforeAnimationCompletion = CGFloat(0.6)
@@ -147,7 +148,7 @@ extension BrowserContainerViewController: BrowserTabViewControllerDelegate {
     }
   }
   
-  func webViewDidEndDragging() {
+  func tabViewControllerDidEndDragging() {
     // if the collapsing animator is active, but the toolbar is not fully collapsed then we need to revert the animation
     if let collapsingToolbarAnimator = collapsingToolbarAnimator,
        collapsingToolbarAnimator.state == .active,
@@ -164,5 +165,16 @@ extension BrowserContainerViewController: BrowserTabViewControllerDelegate {
     
     collapsingToolbarAnimator = nil
     expandingToolbarAnimator = nil
+  }
+  
+  // MARK: Address bar loading bar animation handling
+  func tabViewControllerDidStartLoadingURL(_ tabViewController: BrowserTabViewController) {
+    guard let tabIndex = tabViewControllers.firstIndex(where: { $0 == tabViewController }) else { return }
+    contentView.addressBars[safe: tabIndex]?.setLoadingProgress(0, animated: false)
+  }
+  
+  func tabViewController(_ tabViewController: BrowserTabViewController, didChangeLoadingProgressTo progress: CGFloat) {
+    guard let tabIndex = tabViewControllers.firstIndex(where: { $0 == tabViewController }) else { return }
+    contentView.addressBars[safe: tabIndex]?.setLoadingProgress(progress, animated: true)
   }
 }
