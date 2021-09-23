@@ -25,8 +25,17 @@ class BrowserTabContentView: UIView {
 private extension BrowserTabContentView {
   func setupView() {
     backgroundColor = .white
+    setupShadow()
     setupWebView()
     setupEmptyView()
+  }
+  
+  func setupShadow() {
+    layer.masksToBounds = false
+    layer.shadowColor = UIColor.lightGray.cgColor
+    layer.shadowOffset = CGSize(width: 0, height: 0)
+    layer.shadowOpacity = 0.5
+    layer.shadowRadius = 15
   }
   
   func setupWebView() {
