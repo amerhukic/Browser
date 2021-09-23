@@ -134,7 +134,6 @@
 				1903641726EB427D00B82B1C /* AppDelegate.swift */,
 				1903646226ED07E800B82B1C /* Extensions */,
 				19F17A1726F3F29D00D4F9DE /* Helpers */,
-				1903645226EB980C00B82B1C /* Common */,
 				1903644726EB92F900B82B1C /* Container */,
 				1903644926EB941600B82B1C /* Tab */,
 				1903644826EB932C00B82B1C /* Other */,
@@ -163,6 +162,7 @@
 		1903644726EB92F900B82B1C /* Container */ = {
 			isa = PBXGroup;
 			children = (
+				19E9932F26FCD7F300AD18A0 /* Toolbar */,
 				1903644A26EB944700B82B1C /* BrowserContainerViewController.swift */,
 				19F17A1C26F695B200D4F9DE /* BrowserContainerViewController+Keyboard.swift */,
 				19128CE226FC02D20057E46D /* BrowserContainerViewController+AddressBarsAnimation.swift */,
@@ -193,24 +193,6 @@
 			path = Tab;
 			sourceTree = "<group>";
 		};
-		1903645226EB980C00B82B1C /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				1903645F26ECE02900B82B1C /* AddressBar */,
-				1903645726EBB37700B82B1C /* BrowserToolbar.swift */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
-		1903645F26ECE02900B82B1C /* AddressBar */ = {
-			isa = PBXGroup;
-			children = (
-				1903645926EC9C6800B82B1C /* BrowserAddressBar.swift */,
-				1903646026ECE03A00B82B1C /* BrowserAddressBar+TextField.swift */,
-			);
-			path = AddressBar;
-			sourceTree = "<group>";
-		};
 		1903646226ED07E800B82B1C /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -219,6 +201,16 @@
 				19EE04C726FA525700C41C1B /* Array+Helpers.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		19E9932F26FCD7F300AD18A0 /* Toolbar */ = {
+			isa = PBXGroup;
+			children = (
+				1903645926EC9C6800B82B1C /* BrowserAddressBar.swift */,
+				1903646026ECE03A00B82B1C /* BrowserAddressBar+TextField.swift */,
+				1903645726EBB37700B82B1C /* BrowserToolbar.swift */,
+			);
+			path = Toolbar;
 			sourceTree = "<group>";
 		};
 		19F17A1726F3F29D00D4F9DE /* Helpers */ = {
