@@ -28,6 +28,8 @@ private extension BrowserContainerViewController {
         guard let self = self else { return }
         self.currentAddressBar.containerView.transform = CGAffineTransform(scaleX: 1.2, y: 0.8)
         self.currentAddressBar.domainLabel.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
+        self.leftAddressBar?.containerView.transform = CGAffineTransform(scaleX: 1, y: 0.8)
+        self.rightAddressBar?.containerView.transform = CGAffineTransform(scaleX: 1, y: 0.8)
         self.contentView.layoutIfNeeded()
       }.startAnimation()
     }
@@ -68,6 +70,8 @@ private extension BrowserContainerViewController {
       UIViewPropertyAnimator(duration: 0.1, curve: .easeOut) { [weak self] in
         self?.currentAddressBar.containerView.transform = .identity
         self?.currentAddressBar.domainLabel.transform = .identity
+        self?.leftAddressBar?.containerView.transform = .identity
+        self?.rightAddressBar?.containerView.transform = .identity
         self?.setAddressBarContainersAlpha(1)
         self?.contentView.layoutIfNeeded()
       }.startAnimation()
@@ -93,7 +97,13 @@ private extension BrowserContainerViewController {
   func setAddressBarContainersAlpha(_ alpha: CGFloat) {
     currentAddressBar.setContainerAlpha(alpha)
     leftAddressBar?.setContainerAlpha(alpha)
-    rightAddressBar?.setContainerAlpha(alpha)
+    
+    let rightAddressBarIndex = currentTabIndex + 1
+    if !hasHiddenTab || rightAddressBarIndex < tabViewControllers.count - 1 {
+      // modify the right address bar only if there is no hidden right address bar
+      // or the current right address bar is not the last one
+      rightAddressBar?.setContainerAlpha(alpha)
+    }
   }
 }
 
@@ -102,7 +112,7 @@ extension BrowserContainerViewController: BrowserTabViewControllerDelegate {
   func webViewDidScroll(yOffsetChange: CGFloat) {
     let offsetChangeBeforeFullAnimation = CGFloat(30)
     let animationFractionComplete = abs(yOffsetChange) / offsetChangeBeforeFullAnimation
-    let tresholdBeforeAnimationCompletion = CGFloat(0.7)
+    let tresholdBeforeAnimationCompletion = CGFloat(0.6)
     let isScrollingDown = yOffsetChange < 0
     
     if isScrollingDown {

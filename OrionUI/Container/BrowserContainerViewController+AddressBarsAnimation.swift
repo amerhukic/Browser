@@ -92,4 +92,10 @@ extension BrowserContainerViewController: UIScrollViewDelegate {
       hasHiddenTab = false
     }
   }
+  
+  func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    if !decelerate && currentTabIndex == tabViewControllers.count - 1 {
+      hasHiddenTab = false
+    }
+  }
 }

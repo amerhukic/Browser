@@ -40,10 +40,11 @@ private extension BrowserTabContentView {
   
   func setupWebView() {
     webView.allowsBackForwardNavigationGestures = true
-    webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 0)
+    webView.scrollView.contentInset = .zero
     addSubview(webView)
     webView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
+      $0.top.equalTo(safeAreaLayoutGuide)
+      $0.leading.bottom.trailing.equalToSuperview()
     }
   }
   
