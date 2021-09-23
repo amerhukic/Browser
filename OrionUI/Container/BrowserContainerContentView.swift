@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 
 class BrowserContainerContentView: UIView {
+  let cancelButton = UIButton(type: .system)
   let tabsScrollView = UIScrollView()
   let tabsStackView = UIStackView()
   let addressBarsScrollView = UIScrollView()
@@ -69,6 +70,7 @@ private extension BrowserContainerContentView {
     setupAddressBarsScrollView()
     setupAddressBarsStackView()
     setupAddressBarKeyboardBackgroundView()
+    setupCancelButton()
   }
   
   func setupTabsScrollView() {
@@ -137,6 +139,17 @@ private extension BrowserContainerContentView {
       addressBarKeyboardBackgroundViewBottomConstraint = $0.bottom.equalTo(safeAreaLayoutGuide).constraint
       $0.leading.trailing.equalToSuperview()
       $0.height.equalTo(60)
+    }
+  }
+  
+  func setupCancelButton() {
+    cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+    cancelButton.setTitle("Cancel", for: .normal)
+    cancelButton.alpha = 0
+    addSubview(cancelButton)
+    cancelButton.snp.makeConstraints {
+      $0.top.equalTo(safeAreaLayoutGuide).offset(8)
+      $0.trailing.equalToSuperview().inset(24)
     }
   }
 }

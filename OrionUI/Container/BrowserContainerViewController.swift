@@ -49,25 +49,27 @@ class BrowserContainerViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    setupNavigationBar()
+    setupCancelButton()
     setupAddressBarsScrollView()
     setupKeyboardManager()
     openNewTab(isHidden: false)
+  }
+  
+  func setCancelButtonHidden(_ isHidden: Bool) {
+    UIView.animate(withDuration: 0.1) {
+      self.contentView.cancelButton.alpha = isHidden ? 0 : 1
+    }
   }
 }
 
 // MARK: Helper methods
 private extension BrowserContainerViewController {
-  func setupNavigationBar() {
-    navigationController?.setNavigationBarHidden(true, animated: false)
-    navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-    navigationController?.navigationBar.shadowImage = UIImage()
-    navigationController?.navigationBar.isTranslucent = true
-    navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTapped))
-  }
-  
   func setupAddressBarsScrollView() {
     contentView.addressBarsScrollView.delegate = self
+  }
+  
+  func setupCancelButton() {
+    contentView.cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
   }
   
   func openNewTab(isHidden: Bool) {

@@ -11,14 +11,14 @@ extension BrowserContainerViewController {
   func setupKeyboardManager() {
     viewModel.setKeyboardHandler(onKeyboardWillShow: { [weak self] notification in
       guard let self = self, self.isAddressBarActive else { return }
-      self.navigationController?.setNavigationBarHidden(false, animated: true)
+      self.setCancelButtonHidden(false)
       self.animateWithKeyboard(for: notification) { keyboardFrame in
         self.updateStateForKeyboardAppearing(with: keyboardFrame.height)
       }
     }, onKeyboardWillHide: { [weak self] notification in
       guard let self = self, self.isAddressBarActive else { return }
       self.isAddressBarActive = false
-      self.navigationController?.setNavigationBarHidden(true, animated: true)
+      self.setCancelButtonHidden(true)
       self.animateWithKeyboard(for: notification) { _ in
         self.updateStateForKeyboardDisappearing()
       }
