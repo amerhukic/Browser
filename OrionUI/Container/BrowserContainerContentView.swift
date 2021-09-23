@@ -17,6 +17,7 @@ class BrowserContainerContentView: UIView {
   let toolbar = BrowserToolbar()
   let overlayView = UIView()
   
+  // Address bar animation constants
   let tabsStackViewSpacing = CGFloat(24)
   let addressBarWidthOffset = CGFloat(-48)
   let addressBarContainerHidingWidthOffset = CGFloat(-200)
@@ -24,7 +25,7 @@ class BrowserContainerContentView: UIView {
   let addressBarsStackViewSpacing = CGFloat(4)
   let addressBarsHidingCenterOffset = CGFloat(30)
   
-  // Collapsing and expanding constants
+  // Toolbar collapsing and expanding animation constants
   let addressBarsScrollViewExpandingHalfwayBottomOffset = CGFloat(-22)
   let addressBarsScrollViewExpandingFullyBottomOffset = CGFloat(-38)
   let addressBarsScrollViewCollapsingHalfwayBottomOffset = CGFloat(-8)
@@ -56,6 +57,7 @@ class BrowserContainerContentView: UIView {
   }
 }
 
+// MARK: Helper methods
 private extension BrowserContainerContentView {
   func setupView() {
     backgroundColor = UIColor(white: 0.97, alpha: 1)
