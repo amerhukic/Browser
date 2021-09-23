@@ -17,6 +17,11 @@ class BrowserContainerContentView: UIView {
   let toolbar = BrowserToolbar()
   let overlayView = UIView()
   
+  var addressBarsScrollViewBottomConstraint: Constraint?
+  var addressBarKeyboardBackgroundViewBottomConstraint: Constraint?
+  var toolbarBottomConstraint: Constraint?
+  var tabsScrollViewBottomConstraint: Constraint?
+  
   // Address bar animation constants
   let tabsStackViewSpacing = CGFloat(24)
   let addressBarWidthOffset = CGFloat(-48)
@@ -34,11 +39,9 @@ class BrowserContainerContentView: UIView {
   let toolbarCollapsingFullyBottomOffset = CGFloat(80)
   let toolbarExpandingHalfwayBottomOffset = CGFloat(40)
   let toolbarExpandingFullyBottomOffset = CGFloat(0)
+  let tabsScrollViewCollapsingBottomOffset = CGFloat(-20)
+  let tabsScrollViewExpandingBottomOffset = CGFloat(0)
 
-  var addressBarsScrollViewBottomConstraint: Constraint?
-  var addressBarKeyboardBackgroundViewBottomConstraint: Constraint?
-  var toolbarBottomConstraint: Constraint?
-  
   var addressBarPageWidth: CGFloat {
     frame.width + addressBarWidthOffset + addressBarsStackViewSpacing
   }
@@ -77,7 +80,7 @@ private extension BrowserContainerContentView {
     addSubview(tabsScrollView)
     tabsScrollView.snp.makeConstraints {
       $0.top.leading.trailing.equalToSuperview()
-      $0.bottom.equalToSuperview()
+      tabsScrollViewBottomConstraint = $0.bottom.equalToSuperview().constraint
     }
   }
   
