@@ -98,22 +98,7 @@ private extension BrowserContainerViewController {
   
   func addAddressBar(isHidden: Bool) {
     let addressBar = BrowserAddressBar()
-    addressBar.onBeginEditing = { [weak self] in
-      self?.isAddressBarActive = true
-    }
-    addressBar.onGoTapped = { [weak self, weak addressBar] text in
-      guard let self = self else { return }
-      let tabViewController = self.tabViewControllers[self.currentTabIndex]
-      let isLastTab = self.currentTabIndex == self.tabViewControllers.count - 1
-      if isLastTab && !tabViewController.hasLoadedUrl {
-        self.openNewTab(isHidden: true)
-      }
-      if let url = self.viewModel.getURL(for: text) {
-        addressBar?.setDomain(self.viewModel.getDomain(from: url))
-        tabViewController.loadWebsite(from: url)
-      }
-      self.dismissKeyboard()
-    }
+    addressBar.delegate = self
     contentView.addressBarsStackView.addArrangedSubview(addressBar)
     addressBar.snp.makeConstraints {
       $0.width.equalTo(contentView).offset(contentView.addressBarWidthOffset)
@@ -144,6 +129,26 @@ private extension BrowserContainerViewController {
 // MARK: Action methods
 private extension BrowserContainerViewController {
   @objc func cancelButtonTapped() {
+    dismissKeyboard()
+  }
+}
+
+// MARK: BrowserAddressBarDelegate
+extension BrowserContainerViewController: BrowserAddressBarDelegate {
+  func addressBarDidBeginEditing() {
+    isAddressBarActive = true
+  }
+  
+  func addressBar(_ addressBar: BrowserAddressBar, didReturnWithText text: String) {
+    let tabViewController = tabViewControllers[currentTabIndex]
+    let isLastTab = currentTabIndex == tabViewControllers.count - 1
+    if isLastTab && !tabViewController.hasLoadedUrl {
+      openNewTab(isHidden: true)
+    }
+    if let url = self.viewModel.getURL(for: text) {
+      addressBar.setDomain(viewModel.getDomain(from: url))
+      tabViewController.loadWebsite(from: url)
+    }
     dismissKeyboard()
   }
 }

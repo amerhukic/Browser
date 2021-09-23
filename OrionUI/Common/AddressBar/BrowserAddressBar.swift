@@ -8,6 +8,11 @@
 import UIKit
 import SnapKit
 
+protocol BrowserAddressBarDelegate: AnyObject {
+  func addressBarDidBeginEditing()
+  func addressBar(_ addressBar: BrowserAddressBar, didReturnWithText text: String)
+}
+
 class BrowserAddressBar: UIView {
   let containerView = UIView()
   private let shadowView = UIView()
@@ -21,8 +26,7 @@ class BrowserAddressBar: UIView {
   private let progressView = UIProgressView()
   var containerViewWidthConstraint: Constraint?
 
-  var onBeginEditing: (() -> Void)?
-  var onGoTapped: ((String) -> Void)?
+  weak var delegate: BrowserAddressBarDelegate?
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -179,7 +183,7 @@ private extension BrowserAddressBar {
 
 extension BrowserAddressBar: UITextFieldDelegate {
   func textFieldDidBeginEditing(_: UITextField) {
-    onBeginEditing?()
+    delegate?.addressBarDidBeginEditing()
     textField.text = text
     showEditingState()
     textField.activityState = .editing
@@ -194,7 +198,7 @@ extension BrowserAddressBar: UITextFieldDelegate {
   func textFieldShouldReturn(_: UITextField) -> Bool {
     text = textField.text
     showInactiveState()
-    onGoTapped?(text ?? "")
+    delegate?.addressBar(self, didReturnWithText: text ?? "")
     return true
   }
 }
