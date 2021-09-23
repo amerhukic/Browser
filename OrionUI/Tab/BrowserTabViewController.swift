@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 
 protocol BrowserTabViewControllerDelegate: AnyObject {
-  func tabViewControllerDidStartLoadingURL(_ tabViewController: BrowserTabViewController)
+  func tabViewController(_ tabViewController: BrowserTabViewController, didStartLoadingURL url: URL)
   func tabViewController(_ tabViewController: BrowserTabViewController, didChangeLoadingProgressTo progress: Float)
   func tabViewControllerDidScroll(yOffsetChange: CGFloat)
   func tabViewControllerDidEndDragging()
@@ -41,7 +41,7 @@ class BrowserTabViewController: UIViewController {
   func loadWebsite(from url: URL) {
     contentView.webView.load(URLRequest(url: url))
     hasLoadedUrl = true
-    delegate?.tabViewControllerDidStartLoadingURL(self)
+    delegate?.tabViewController(self, didStartLoadingURL: url)
     hideEmptyStateIfNeeded()
   }
   
@@ -91,7 +91,7 @@ extension BrowserTabViewController: WKNavigationDelegate {
     if navigationAction.navigationType == .linkActivated {
       guard let url = navigationAction.request.url else {return}
       webView.load(URLRequest(url: url))
-      delegate?.tabViewControllerDidStartLoadingURL(self)
+      delegate?.tabViewController(self, didStartLoadingURL: url)
     }
     decisionHandler(.allow)
   }

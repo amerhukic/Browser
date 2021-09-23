@@ -168,9 +168,13 @@ extension BrowserContainerViewController: BrowserTabViewControllerDelegate {
   }
   
   // MARK: Address bar loading bar animation handling
-  func tabViewControllerDidStartLoadingURL(_ tabViewController: BrowserTabViewController) {
-    guard let tabIndex = tabViewControllers.firstIndex(where: { $0 == tabViewController }) else { return }
-    contentView.addressBars[safe: tabIndex]?.setLoadingProgress(0, animated: false)
+  func tabViewController(_ tabViewController: BrowserTabViewController, didStartLoadingURL url: URL) {
+    guard let tabIndex = tabViewControllers.firstIndex(where: { $0 == tabViewController }),
+          let addressBar = contentView.addressBars[safe: tabIndex] else {
+      return
+    }
+    addressBar.setLoadingProgress(0, animated: false)
+    addressBar.domainLabel.text = viewModel.getDomain(from: url)
   }
   
   func tabViewController(_ tabViewController: BrowserTabViewController, didChangeLoadingProgressTo progress: Float) {

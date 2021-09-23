@@ -182,6 +182,7 @@ private extension BrowserAddressBar {
       UIView.animate(withDuration: 0.5, animations: {
         self.progressView.layoutIfNeeded()
       }, completion: { _ in
+        self.setProgress(0)
         UIView.animate(withDuration: 0.2) {
           self.progressView.alpha = 0
         }
