@@ -10,7 +10,7 @@ import WebKit
 
 protocol BrowserTabViewControllerDelegate: AnyObject {
   func tabViewControllerDidStartLoadingURL(_ tabViewController: BrowserTabViewController)
-  func tabViewController(_ tabViewController: BrowserTabViewController, didChangeLoadingProgressTo progress: CGFloat)
+  func tabViewController(_ tabViewController: BrowserTabViewController, didChangeLoadingProgressTo progress: Float)
   func tabViewControllerDidScroll(yOffsetChange: CGFloat)
   func tabViewControllerDidEndDragging()
 }
@@ -35,7 +35,7 @@ class BrowserTabViewController: UIViewController {
   
   override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
     guard keyPath == estimatedProgressKeyPath else { return }
-    delegate?.tabViewController(self, didChangeLoadingProgressTo: CGFloat(contentView.webView.estimatedProgress))
+    delegate?.tabViewController(self, didChangeLoadingProgressTo: Float(contentView.webView.estimatedProgress))
   }
   
   func loadWebsite(from url: URL) {
@@ -91,6 +91,7 @@ extension BrowserTabViewController: WKNavigationDelegate {
     if navigationAction.navigationType == .linkActivated {
       guard let url = navigationAction.request.url else {return}
       webView.load(URLRequest(url: url))
+      delegate?.tabViewControllerDidStartLoadingURL(self)
     }
     decisionHandler(.allow)
   }

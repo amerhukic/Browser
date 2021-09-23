@@ -48,14 +48,9 @@ class BrowserAddressBar: UIView {
     }
   }
   
-  func setLoadingProgress(_ progress: CGFloat, animated: Bool) {
+  func setLoadingProgress(_ progress: Float, animated: Bool) {
     progressView.alpha = 1
-    setProgressViewProgress(progress: progress, animated: animated)
-    if progress >= 1 {
-      UIView.animate(withDuration: 0.2, delay: 0.3) {
-        self.progressView.alpha = 0
-      }
-    }
+    animated ? animateProgress(progress) : setProgress(progress)
   }
 }
 
@@ -166,6 +161,32 @@ private extension BrowserAddressBar {
     progressView.setProgress(Float(progress), animated: false)
     progressView.setNeedsLayout()
     progressView.layoutIfNeeded()
+  }
+  
+  func setProgress(_ progress: Float) {
+    if let layers = progressView.layer.sublayers {
+      layers.forEach { layer in
+        layer.removeAllAnimations()
+      }
+    }
+    progressView.setProgress(progress, animated: false)
+    progressView.setNeedsLayout()
+    progressView.layoutIfNeeded()
+  }
+  
+  func animateProgress(_ progress: Float) {
+    if progress < 1 {
+      progressView.setProgress(progress, animated: true)
+    } else {
+      progressView.progress = progress
+      UIView.animate(withDuration: 0.5, animations: {
+        self.progressView.layoutIfNeeded()
+      }, completion: { _ in
+        UIView.animate(withDuration: 0.2) {
+          self.progressView.alpha = 0
+        }
+      })
+    }
   }
 }
 
