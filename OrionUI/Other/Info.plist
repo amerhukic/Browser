@@ -41,5 +41,13 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
+	    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+        <key>NSExceptionDomains</key>
+        <dict>
+        </dict>
+	</dict>
 </dict>
 </plist>

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import WebKit
 
 protocol BrowserTabViewControllerDelegate: AnyObject {
   func webViewDidScroll(yOffsetChange: CGFloat)
@@ -26,6 +27,7 @@ class BrowserTabViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     contentView.webView.scrollView.panGestureRecognizer.addTarget(self, action: #selector(handlePan(_:)))
+    contentView.webView.navigationDelegate = self
   }
   
   func loadWebsite(from url: URL) {
@@ -61,5 +63,15 @@ private extension BrowserTabViewController {
     default:
       break
     }
+  }
+}
+
+extension BrowserTabViewController: WKNavigationDelegate {
+  func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    if navigationAction.navigationType == .linkActivated {
+      guard let url = navigationAction.request.url else {return}
+      webView.load(URLRequest(url: url))
+    }
+    decisionHandler(.allow)
   }
 }
