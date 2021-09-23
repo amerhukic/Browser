@@ -15,7 +15,11 @@ class BrowserContainerViewController: UIViewController {
   // Address bar animation properties
   var isAddressBarActive = false
   var hasHiddenTab = false
-  var currentTabIndex = 0
+  var currentTabIndex = 0 {
+    didSet {
+      updateAddressBarsAfterTabChange()
+    }
+  }
   
   // Toolbar animation properties
   var collapsingToolbarAnimator: UIViewPropertyAnimator?
@@ -125,6 +129,15 @@ private extension BrowserContainerViewController {
   
   func dismissKeyboard() {
     view.endEditing(true)
+  }
+  
+  func updateAddressBarsAfterTabChange() {
+    currentAddressBar.setSideButtonsHidden(false)
+    currentAddressBar.isUserInteractionEnabled = true
+    leftAddressBar?.setSideButtonsHidden(true)
+    leftAddressBar?.isUserInteractionEnabled = false
+    rightAddressBar?.setSideButtonsHidden(true)
+    rightAddressBar?.isUserInteractionEnabled = false
   }
 }
 

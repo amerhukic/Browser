@@ -13,7 +13,7 @@ class BrowserAddressBar: UIView {
   private let shadowView = UIView()
   let domainLabel = UILabel()
   private let plusOverlayView = UIView()
-  private let textField = TextField()
+  let textField = TextField()
   private let textFieldSidePadding = CGFloat(4)
   private var textFieldLeadingConstraint: Constraint?
   private var textFieldTrailingConstraint: Constraint?
@@ -47,6 +47,13 @@ class BrowserAddressBar: UIView {
   
   func setDomain(_ domain: String) {
     domainLabel.text = domain
+  }
+  
+  func setSideButtonsHidden(_ isHidden: Bool) {
+    UIView.animate(withDuration: 0.2) {
+      self.textField.leftView?.alpha = isHidden ? 0 : 1
+      self.textField.rightView?.alpha = isHidden ? 0 : 1
+    }
   }
 }
 
