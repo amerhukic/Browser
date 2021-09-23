@@ -32,7 +32,7 @@ private extension BrowserTabEmptyView {
     addSubview(imageView)
     imageView.snp.makeConstraints {
       $0.top.leading.trailing.equalToSuperview()
-      $0.bottom.equalToSuperview().inset(130)
+      $0.bottom.equalToSuperview().inset(100)
     }
   }
 }

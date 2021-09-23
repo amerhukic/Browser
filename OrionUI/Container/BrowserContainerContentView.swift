@@ -138,7 +138,7 @@ private extension BrowserContainerContentView {
     addressBarKeyboardBackgroundView.snp.makeConstraints {
       addressBarKeyboardBackgroundViewBottomConstraint = $0.bottom.equalTo(safeAreaLayoutGuide).constraint
       $0.leading.trailing.equalToSuperview()
-      $0.height.equalTo(60)
+      $0.height.equalTo(72)
     }
   }
   
