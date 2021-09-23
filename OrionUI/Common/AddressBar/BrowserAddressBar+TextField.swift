@@ -88,6 +88,7 @@ private extension BrowserAddressBar.TextField {
     autocorrectionType = .no
     autocapitalizationType = .none
     keyboardType = .URL
+    enablesReturnKeyAutomatically = true
     setupMagnifyingGlassImage()
     setupAaButton()
     setupReloadButton()
