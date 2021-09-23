@@ -31,6 +31,20 @@ class BrowserTabViewController: UIViewController {
   func loadWebsite(from url: URL) {
     contentView.webView.load(URLRequest(url: url))
     hasLoadedUrl = true
+    hideEmptyStateIfNeeded()
+  }
+  
+  func showEmptyState() {
+    UIView.animate(withDuration: 0.2) {
+      self.contentView.emptyView.alpha = 1
+    }
+  }
+  
+  func hideEmptyStateIfNeeded() {
+    guard hasLoadedUrl else { return }
+    UIView.animate(withDuration: 0.2) {
+      self.contentView.emptyView.alpha = 0
+    }
   }
 }
 

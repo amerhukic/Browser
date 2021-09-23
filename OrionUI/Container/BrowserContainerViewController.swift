@@ -79,6 +79,7 @@ private extension BrowserContainerViewController {
     let tabViewController = BrowserTabViewController()
     tabViewController.view.alpha = isHidden ? 0 : 1
     tabViewController.view.transform = isHidden ? CGAffineTransform(scaleX: 0.8, y: 0.8) : .identity
+    tabViewController.showEmptyState()
     tabViewController.delegate = self
     tabViewControllers.append(tabViewController)
     contentView.tabsStackView.addArrangedSubview(tabViewController.view)

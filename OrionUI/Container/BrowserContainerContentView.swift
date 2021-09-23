@@ -15,7 +15,6 @@ class BrowserContainerContentView: UIView {
   let addressBarsStackView = UIStackView()
   let addressBarKeyboardBackgroundView = UIView()
   let toolbar = BrowserToolbar()
-  let overlayView = UIView()
   
   var addressBarsScrollViewBottomConstraint: Constraint?
   var addressBarKeyboardBackgroundViewBottomConstraint: Constraint?
@@ -70,7 +69,6 @@ private extension BrowserContainerContentView {
     setupAddressBarsScrollView()
     setupAddressBarsStackView()
     setupAddressBarKeyboardBackgroundView()
-    setupOverlayView()
   }
   
   func setupTabsScrollView() {
@@ -139,15 +137,6 @@ private extension BrowserContainerContentView {
       addressBarKeyboardBackgroundViewBottomConstraint = $0.bottom.equalTo(safeAreaLayoutGuide).constraint
       $0.leading.trailing.equalToSuperview()
       $0.height.equalTo(60)
-    }
-  }
-  
-  func setupOverlayView() {
-    overlayView.alpha = 0
-    overlayView.backgroundColor = .white
-    insertSubview(overlayView, belowSubview: addressBarKeyboardBackgroundView)
-    overlayView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
     }
   }
 }

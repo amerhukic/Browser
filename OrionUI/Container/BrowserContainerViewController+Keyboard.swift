@@ -40,18 +40,18 @@ private extension BrowserContainerViewController {
   }
   
   func updateStateForKeyboardAppearing(with keyboardHeight: CGFloat) {
-    contentView.overlayView.alpha = 1
     contentView.addressBarKeyboardBackgroundView.isHidden = false
     contentView.addressBarKeyboardBackgroundViewBottomConstraint?.update(offset: -keyboardHeight)
     contentView.addressBarsScrollViewBottomConstraint?.update(offset: -keyboardHeight)
+    tabViewControllers[safe: currentTabIndex]?.showEmptyState()
     setSideAddressBarsHidden(true)
   }
   
   func updateStateForKeyboardDisappearing() {
-    contentView.overlayView.alpha = 0
     contentView.addressBarKeyboardBackgroundView.isHidden = true
     contentView.addressBarKeyboardBackgroundViewBottomConstraint?.update(offset: 0)
     contentView.addressBarsScrollViewBottomConstraint?.update(offset: contentView.addressBarsScrollViewExpandingFullyBottomOffset)
+    tabViewControllers[safe: currentTabIndex]?.hideEmptyStateIfNeeded()
     setSideAddressBarsHidden(false)
   }
   
