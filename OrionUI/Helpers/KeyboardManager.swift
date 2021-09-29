@@ -45,6 +45,7 @@ private extension KeyboardManager {
   }
   
   @objc func keyboardWillHide(_ notification: NSNotification) {
+    guard isKeyboardShown else { return }
     keyboardWillHideHandler?(notification)
     isKeyboardShown = false
   }
