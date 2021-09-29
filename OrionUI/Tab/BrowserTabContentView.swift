@@ -40,6 +40,7 @@ private extension BrowserTabContentView {
   }
   
   func setupWebView() {
+    webView.scrollView.automaticallyAdjustsScrollIndicatorInsets = false
     webView.allowsBackForwardNavigationGestures = true
     webView.scrollView.contentInset = .zero
     addSubview(webView)
