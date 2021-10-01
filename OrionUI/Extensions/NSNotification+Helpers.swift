@@ -12,8 +12,20 @@ extension NSNotification {
     userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double
   }
   
-  var keyboardFrame: CGRect? {
+  var keyboardBeginFrame: CGRect? {
+    (userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue
+  }
+  
+  var keyboardEndFrame: CGRect? {
     (userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+  }
+  
+  var keyboardWillShow: Bool {
+    guard let keyboardBeginFrame = keyboardBeginFrame,
+          let keyboardEndFrame = keyboardEndFrame else {
+      return false
+    }
+    return keyboardBeginFrame.minY > keyboardEndFrame.minY
   }
   
   var keyboardAnimationCurve: UIView.AnimationCurve? {

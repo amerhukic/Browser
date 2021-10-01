@@ -29,7 +29,7 @@ extension BrowserContainerViewController {
 // MARK: Helper methods
 private extension BrowserContainerViewController {
   func animateWithKeyboard(for notification: NSNotification, animation: ((CGRect) -> Void)?) {
-    guard let frame = notification.keyboardFrame,
+    guard let frame = notification.keyboardEndFrame,
           let duration = notification.keyboardAnimationDuration,
           let curve = notification.keyboardAnimationCurve else {
       return
@@ -67,6 +67,12 @@ private extension BrowserContainerViewController {
   }
   
   func setHidden(_ isHidden: Bool, forRightAddressBar addressBar: UIView) {
+    // In some cases keyboard will show is called multiple times.
+    // To prevent the address bar center from being offset multiple times we have to check if it is already offset
+    if (isHidden && addressBar.alpha == 0) {
+      return
+    }
+    
     let offset = contentView.addressBarsHidingCenterOffset
     if isHidden {
       addressBar.center = CGPoint(x: addressBar.center.x + offset,
@@ -79,6 +85,10 @@ private extension BrowserContainerViewController {
   }
   
   func setHidden(_ isHidden: Bool, forLeftAddressBar addressBar: UIView) {
+    if (isHidden && addressBar.alpha == 0) {
+      return
+    }
+    
     let offset = contentView.addressBarsHidingCenterOffset
     if isHidden {
       addressBar.center = CGPoint(x: addressBar.center.x - offset,
