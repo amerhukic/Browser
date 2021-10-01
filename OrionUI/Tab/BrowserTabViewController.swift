@@ -20,7 +20,6 @@ class BrowserTabViewController: UIViewController {
   private var isScrolling = false
   private var startYOffset = CGFloat(0)
   private var loadingProgressObservation: NSKeyValueObservation?
-  private let estimatedProgressKeyPath = "estimatedProgress"
   var hasLoadedUrl = false
   weak var delegate: BrowserTabViewControllerDelegate?
   
@@ -34,14 +33,19 @@ class BrowserTabViewController: UIViewController {
   }
   
   override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-    guard keyPath == estimatedProgressKeyPath else { return }
-    delegate?.tabViewController(self, didChangeLoadingProgressTo: Float(contentView.webView.estimatedProgress))
+    switch keyPath {
+    case #keyPath(WKWebView.url):
+      delegate?.tabViewController(self, didStartLoadingURL: contentView.webView.url!)
+    case #keyPath(WKWebView.estimatedProgress):
+      delegate?.tabViewController(self, didChangeLoadingProgressTo: Float(contentView.webView.estimatedProgress))
+    default:
+      break
+    }
   }
   
   func loadWebsite(from url: URL) {
     contentView.webView.load(URLRequest(url: url))
     hasLoadedUrl = true
-    delegate?.tabViewController(self, didStartLoadingURL: url)
     hideEmptyStateIfNeeded()
   }
   
@@ -64,7 +68,8 @@ private extension BrowserTabViewController {
   func setupWebView() {
     contentView.webView.scrollView.panGestureRecognizer.addTarget(self, action: #selector(handlePan(_:)))
     contentView.webView.navigationDelegate = self
-    contentView.webView.addObserver(self, forKeyPath: estimatedProgressKeyPath, options: .new, context: nil)
+    contentView.webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
+    contentView.webView.addObserver(self, forKeyPath: #keyPath(WKWebView.url), options: .new, context: nil)
   }
 }
 
@@ -89,9 +94,9 @@ private extension BrowserTabViewController {
 extension BrowserTabViewController: WKNavigationDelegate {
   func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
     if navigationAction.navigationType == .linkActivated {
-      guard let url = navigationAction.request.url else {return}
+      // handle redirects
+      guard let url = navigationAction.request.url else { return }
       webView.load(URLRequest(url: url))
-      delegate?.tabViewController(self, didStartLoadingURL: url)
     }
     decisionHandler(.allow)
   }
