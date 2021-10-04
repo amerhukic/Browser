@@ -20,7 +20,6 @@ class BrowserContainerContentView: UIView {
   var addressBarsScrollViewBottomConstraint: Constraint?
   var addressBarKeyboardBackgroundViewBottomConstraint: Constraint?
   var toolbarBottomConstraint: Constraint?
-  var tabsScrollViewBottomConstraint: Constraint?
   
   // Address bar animation constants
   let tabsStackViewSpacing = CGFloat(24)
@@ -39,8 +38,6 @@ class BrowserContainerContentView: UIView {
   let toolbarCollapsingFullyBottomOffset = CGFloat(80)
   let toolbarExpandingHalfwayBottomOffset = CGFloat(40)
   let toolbarExpandingFullyBottomOffset = CGFloat(0)
-  let tabsScrollViewCollapsingBottomOffset = CGFloat(-20)
-  let tabsScrollViewExpandingBottomOffset = CGFloat(0)
 
   var addressBarPageWidth: CGFloat {
     frame.width + addressBarWidthOffset + addressBarsStackViewSpacing
@@ -77,10 +74,11 @@ private extension BrowserContainerContentView {
     tabsScrollView.showsHorizontalScrollIndicator = false
     tabsScrollView.showsVerticalScrollIndicator = false
     tabsScrollView.isScrollEnabled = false
+    // turn off masks to bounds to allow webview content to show under the toolbar
+    tabsScrollView.layer.masksToBounds = false
     addSubview(tabsScrollView)
     tabsScrollView.snp.makeConstraints {
       $0.top.leading.trailing.equalToSuperview()
-      tabsScrollViewBottomConstraint = $0.bottom.equalToSuperview().constraint
     }
   }
   
@@ -99,6 +97,7 @@ private extension BrowserContainerContentView {
   func setupToolbar() {
     addSubview(toolbar)
     toolbar.snp.makeConstraints {
+      $0.top.equalTo(tabsScrollView.snp.bottom)
       $0.leading.trailing.equalToSuperview()
       toolbarBottomConstraint = $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).constraint
       $0.height.equalTo(100)

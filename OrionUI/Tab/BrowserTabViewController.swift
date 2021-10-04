@@ -38,6 +38,10 @@ class BrowserTabViewController: UIViewController {
       delegate?.tabViewController(self, didStartLoadingURL: contentView.webView.url!)
     case #keyPath(WKWebView.estimatedProgress):
       delegate?.tabViewController(self, didChangeLoadingProgressTo: Float(contentView.webView.estimatedProgress))
+    case #keyPath(WKWebView.themeColor):
+      updateStatusBarColor()
+    case #keyPath(WKWebView.underPageBackgroundColor):
+      updateStatusBarColor()
     default:
       break
     }
@@ -70,6 +74,13 @@ private extension BrowserTabViewController {
     contentView.webView.navigationDelegate = self
     contentView.webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
     contentView.webView.addObserver(self, forKeyPath: #keyPath(WKWebView.url), options: .new, context: nil)
+    contentView.webView.addObserver(self, forKeyPath: #keyPath(WKWebView.themeColor), options: .new, context: nil)
+    contentView.webView.addObserver(self, forKeyPath: #keyPath(WKWebView.underPageBackgroundColor), options: .new, context: nil)
+  }
+  
+  func updateStatusBarColor() {
+    let color = (contentView.webView.themeColor ?? contentView.webView.underPageBackgroundColor ?? .white).withAlphaComponent(1)
+    contentView.statusBarBackgroundView.backgroundColor = color
   }
 }
 

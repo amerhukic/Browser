@@ -23,7 +23,6 @@ private extension BrowserContainerViewController {
       guard let self = self else { return }
       self.contentView.addressBarsScrollViewBottomConstraint?.update(offset: self.contentView.addressBarsScrollViewCollapsingFullyBottomOffset)
       self.contentView.toolbarBottomConstraint?.update(offset: self.contentView.toolbarCollapsingFullyBottomOffset)
-      self.contentView.tabsScrollViewBottomConstraint?.update(offset: self.contentView.tabsScrollViewCollapsingBottomOffset)
       UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) { [weak self] in
         guard let self = self else { return }
         self.currentAddressBar.containerView.transform = CGAffineTransform(scaleX: 1.2, y: 0.8)
@@ -66,7 +65,6 @@ private extension BrowserContainerViewController {
       guard let self = self else { return }
       self.contentView.toolbarBottomConstraint?.update(offset: self.contentView.toolbarExpandingFullyBottomOffset)
       self.contentView.addressBarsScrollViewBottomConstraint?.update(offset: self.contentView.addressBarsScrollViewExpandingFullyBottomOffset)
-      self.contentView.tabsScrollViewBottomConstraint?.update(offset: self.contentView.tabsScrollViewExpandingBottomOffset)
       UIViewPropertyAnimator(duration: 0.2, curve: .easeIn) { [weak self] in
         self?.currentAddressBar.containerView.transform = .identity
         self?.currentAddressBar.domainLabel.transform = .identity
