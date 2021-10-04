@@ -60,6 +60,7 @@ class BrowserContainerViewController: UIViewController {
     super.viewDidLoad()
     setupCancelButton()
     setupAddressBarsScrollView()
+    setupAddressBarsExpandingOnTap()
     setupKeyboardManager()
     openNewTab(isHidden: false)
   }
@@ -129,12 +130,24 @@ private extension BrowserContainerViewController {
     rightAddressBar?.setSideButtonsHidden(true)
     rightAddressBar?.isUserInteractionEnabled = false
   }
+  
+  func setupAddressBarsExpandingOnTap() {
+    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(addressBarScrollViewTapped))
+    contentView.addressBarsScrollView.addGestureRecognizer(tapGestureRecognizer)
+  }
 }
 
 // MARK: Action methods
 private extension BrowserContainerViewController {
   @objc func cancelButtonTapped() {
     dismissKeyboard()
+  }
+  
+  @objc func addressBarScrollViewTapped() {
+    guard isCollapsed else { return }
+    setupExpandingToolbarAnimator()
+    expandingToolbarAnimator?.startAnimation()
+    isCollapsed = false
   }
 }
 

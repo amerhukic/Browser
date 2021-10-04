@@ -7,7 +7,7 @@
 
 import UIKit
 
-private extension BrowserContainerViewController {
+extension BrowserContainerViewController {
   
   // MARK: Toolbar collapsing animation
   func setupCollapsingToolbarAnimator() {
