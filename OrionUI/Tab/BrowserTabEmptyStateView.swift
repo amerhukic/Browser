@@ -32,8 +32,9 @@ private extension BrowserTabEmptyStateView {
     imageView.contentMode = .scaleAspectFit
     addSubview(imageView)
     imageView.snp.makeConstraints {
-      $0.top.leading.trailing.equalToSuperview()
-      $0.bottom.equalToSuperview().inset(100)
+      $0.top.equalToSuperview().offset(60)
+      $0.leading.trailing.equalToSuperview()
+      $0.bottom.equalToSuperview()
     }
   }
 }

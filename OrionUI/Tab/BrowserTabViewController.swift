@@ -23,6 +23,11 @@ class BrowserTabViewController: UIViewController {
   var hasLoadedUrl = false
   weak var delegate: BrowserTabViewControllerDelegate?
   
+  override var preferredStatusBarStyle: UIStatusBarStyle {
+    let isBackgroundColorDark = contentView.statusBarBackgroundView.backgroundColor?.isDark ?? false
+    return isBackgroundColorDark ? .lightContent : .darkContent
+  }
+  
   override func loadView() {
     view = contentView
   }
@@ -81,6 +86,7 @@ private extension BrowserTabViewController {
   func updateStatusBarColor() {
     let color = (contentView.webView.themeColor ?? contentView.webView.underPageBackgroundColor ?? .white).withAlphaComponent(1)
     contentView.statusBarBackgroundView.backgroundColor = color
+    setNeedsStatusBarAppearanceUpdate()
   }
 }
 

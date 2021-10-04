@@ -18,6 +18,7 @@ class BrowserContainerViewController: UIViewController {
   var currentTabIndex = 0 {
     didSet {
       updateAddressBarsAfterTabChange()
+      setNeedsStatusBarAppearanceUpdate()
     }
   }
   
@@ -36,6 +37,10 @@ class BrowserContainerViewController: UIViewController {
   
   var rightAddressBar: BrowserAddressBar? {
     contentView.addressBars[safe: currentTabIndex + 1]
+  }
+  
+  override var childForStatusBarStyle: UIViewController? {
+    tabViewControllers[safe: currentTabIndex]
   }
   
   init(viewModel: BrowserContainerViewModel = .init()) {
