@@ -1,7 +1,12 @@
-# Orion UI
-## Project structure
+# Browser
 
-This document contains a high level overview of the app structure and animations.
+This project is my attempt to clone the new Safari iOS app UI on iOS 15.
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/amerhukic/Browser/main/Demo.gif" width="380" max-width="80%"/>
+</p>
+
+## Project structure
 
 The UI of the project is composed of 2 main parts:
 1. `BrowserContainerViewController` which is a container view controller that contains all the UI elements - address bars, toolbar and tabs.
