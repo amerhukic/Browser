@@ -1,6 +1,18 @@
-# Browser
+<p align="center">
+<img src="https://raw.githubusercontent.com/amerhukic/Browser/main/Logo.png" width="420" max-width="80%" alt="Logo" />
+</p>
 
-This project is my attempt to clone the new Safari iOS app UI on iOS 15.
+<p align="center">
+    <img src="https://img.shields.io/badge/Swift-5-orange.svg" />
+    <a href="">
+        <img src="https://img.shields.io/badge/Licence-MIT-green.svg" alt="License">
+    </a>
+    <a href="https://twitter.com/hukicamer">
+        <img src="https://img.shields.io/badge/contact-%40hukicamer-blue.svg?style=flat" alt="Twitter: @hukicamer" />
+    </a>
+</p>
+
+This project showcases the implementation of the redesigned Safari app UI on iOS 15. It features keyboard animations, collapsing and expanding toolbar animations and animation for creating new tabs. 
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/amerhukic/Browser/main/Demo.gif" width="380" max-width="80%"/>
@@ -57,4 +69,12 @@ These animations were implemented using `UIViewPropertyAnimator`s. There are 4 a
 
 The `UIViewPropertyAnimator`'s `fractionComplete` property is used for managing the completion of each animator.
 For animations we used constraints for moving the toolbar and address bars up and down, alpha for fading in and out and transforms for scaling the address bars and domain label.
+The implementation of this feature is described in more detail [on my blog](https://www.amerhukic.com/implementing-the-safari-toolbar-collapsing-and-expanding-animation-on-ios-15).
 
+## Author
+
+[Amer Hukić](https://amerhukic.com)
+
+## License
+
+Browser is licensed under the MIT license. Check the [LICENSE](LICENSE) file for details.
