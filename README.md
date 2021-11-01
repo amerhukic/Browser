@@ -14,6 +14,7 @@
 
 This project showcases the implementation of the redesigned Safari app UI on iOS 15. It features keyboard animations, collapsing and expanding toolbar animations and animation for creating new tabs. 
 
+<br>
 <p align="center">
 <img src="https://raw.githubusercontent.com/amerhukic/Browser/main/Demo.gif" width="380" max-width="80%"/>
 </p>
